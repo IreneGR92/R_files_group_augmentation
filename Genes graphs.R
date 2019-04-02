@@ -1,12 +1,16 @@
 rm(list=ls())
 
-directory<-"H:\\PhD\\CODE\\All_results\\" 
-#directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\"
+#directory<-"H:\\PhD\\CODE\\All_results\\" 
+directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\"
 nameFile<-"helpRN_dispersal065-F2"
 
 getwd()
 setwd(paste(directory, "txt_files\\main",sep=""))
 GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=28)
+setwd(paste(directory, "txt_files\\last_generation",sep=""))
+GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=28)
+GA2 <- subset(GA2, age>0)
+setDF(GA2)
 
 
 library("ggplot2")
@@ -17,6 +21,7 @@ library("formattable")
 #Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_201')
 library("rJava")
 library("xlsx")
+library(data.table)
 
 
 #head(GA)
@@ -52,7 +57,7 @@ GA_SD<-do_sd(GA)
 
 
 
-################## STATS LAST GENERATION ############################
+################## STATS LAST GENERATION FROM MAIN ############################
 
 ##Means and SD of the means of the variables between the different replicas
 
@@ -121,9 +126,52 @@ write.xlsx(descriptives2, paste(directory, "results_", nameFile, ".xlsx",sep="")
 write.xlsx(descriptives, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "All_Results", append = TRUE)
 
 
+###################### LAST GENERATION #################################
+
+##FORMULAS
+
+replace_with_zero_if_below_zero <- function(x) {
+  x <- ifelse(x<0,0,x)
+  return(x)
+}
+
+###Help
+
+help_Formula<-function(){
+  help <- GA2$alpha+GA2$alphaAge*GA2$age+GA2$alphaAge2*GA2$age*GA2$age
+  help <- sapply(help, replace_with_zero_if_below_zero)
+  return(help)}
+
+GA2$Help <- help_Formula()
+GA2[GA2$type==0,]$Help<-NA
+
+
+###Dispersal
+dispersal_Formula<-function(){
+  dispersal<-1 / (1 + exp(GA2$betaAge*GA2$age - GA2$beta))
+  return(dispersal)}
+
+GA2$Dispersal<-dispersal_Formula()
+GA2[GA2$type==0,]$Dispersal<-NA
+
+##Age
+mean_age<-mean(GA2$age)
+
+
+dichotonomic_age <- function(x) {
+  x <- ifelse(x<mean_age,"< mean age","> mean age")
+  return(x)
+}
+
+GA2$AgeDic<-dichotonomic_age(GA2$age)
+GA2$AgeDic<-as.factor(GA2$AgeDic)
+
+
+
+
 ################################## PLOTS #######################################
 
-pdf(paste(directory, "graphs_", nameFile, "2.pdf",sep="")) # Open a pdf file
+pdf(paste(directory, "graphs_", nameFile, ".pdf",sep="")) # Open a pdf file
 
 
 ##Help plot
@@ -183,7 +231,7 @@ grid.arrange(p1, p2, p6, p4, p3, p5, nrow = 3)
 
 # grid<-matrix(c(1,2),nrow=1,ncol=2)
 # layout(grid)
-par(mfrow = c(3, 3))
+par(mfrow = c(3, 2))
 age<-seq(from=1,by=1, length=11)
 
 # HELP
@@ -206,8 +254,18 @@ helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l",
 dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
 dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
 
-par(mfrow = c(1, 1))
 
+
+
+########## LAST GENRATION ##########
+
+
+plot(GA2$Help, GA2$Dispersal, col=c("blue","green")[GA2$AgeDic],  xlab="Help", ylab="Dispersal") 
+legend(x="bottomright", legend = levels(GA2$AgeDic), col=c("blue","green"), pch=1)
+title("Dispersal vs Help")
+
+
+par(mfrow = c(1, 1))
 
 
 dev.off() # Close the pdf file
@@ -223,58 +281,5 @@ dev.off() # Close the pdf file
 
 #library("XLConnectJars")
 #library("XLConnect")
-png("H:\\PhD\\CODE\\All_results\\rplot.png", width = 150, height = 350)# 1. Open png file
-Graph# 2. Create the plot
-dev.off()# 3. Close the plot file
 
-
-
-fileXls <- paste(outDir, "C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\descriptives.xlsx",sep='t/')
-unlink(fileXls, recursive = FALSE, force = FALSE)
-exc <- loadWorkbook(fileXls, create = TRUE)
-createSheet(exc,'Input')
-saveWorkbook(exc)
-
-# Load workbook (create if not existing)
-wb <- loadWorkbook("C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\descriptives.xlsx", create = TRUE)
-
-# Create a sheet named 'earthquake'
-createSheet(wb, name = "earthquake")
-
-# Create a named region called 'earthquake' referring to the sheet
-# called 'earthquake' 
-createName(wb, name = "earthquake", formula = "earthquake!$B$2")
-
-# Create R plot to a png device
-require(lattice)
-png(filename = "earthquake.png", width = 800, height = 600)
-devAskNewPage(ask = FALSE)
-
-Depth <- equal.count(quakes$depth, number=8, overlap=.1)
-xyplot(lat ~ long | Depth, data = quakes)
-update(trellis.last.object(),
-       strip = strip.custom(strip.names = TRUE, strip.levels = TRUE),
-       par.strip.text = list(cex = 0.75),
-       aspect = "iso")
-
-dev.off()
-
-# Write image to the named region created above using the image's
-# original size; i.e. the image's top left corner will match the
-# specified cell's top left corner 
-addImage(wb, filename = "earthquake.png", name = "earthquake",
-         originalSize = TRUE)
-
-# Save workbook (this actually writes the file to disk)
-saveWorkbook(wb)
-
-
-
-library(ggplot2)
-fileGraph <- paste(descriptives,'graph.png',sep='/')
-png(filename = Graph, width = 800, height = 600)
-print(Graph)
-invisible(dev.off())
-addImage(descriptives,fileGraph, 'OzonePlot',TRUE)
-saveWorkbook(descriptives)
 
