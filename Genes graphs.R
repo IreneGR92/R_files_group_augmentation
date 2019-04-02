@@ -1,18 +1,5 @@
 rm(list=ls())
 
-#directory<-"H:\\PhD\\CODE\\All_results\\" 
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\"
-nameFile<-"helpRN_dispersal065-F2"
-
-getwd()
-setwd(paste(directory, "txt_files\\main",sep=""))
-GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=28)
-setwd(paste(directory, "txt_files\\last_generation",sep=""))
-GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=28)
-GA2 <- subset(GA2, age>0)
-setDF(GA2)
-
-
 library("ggplot2")
 library("gtable")
 library("grid")
@@ -21,7 +8,21 @@ library("formattable")
 #Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_201')
 library("rJava")
 library("xlsx")
-library(data.table)
+library("data.table")
+
+#directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\" 
+directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\"
+nameFile<-"helpRN_dispersal065-F2"
+
+getwd()
+setwd(paste(directory, "main",sep=""))
+Parameters<-read.table("group_augmentation_test.txt", skip=1, nrows=5)
+GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=28)
+
+setwd(paste(directory, "last_generation",sep=""))
+GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=28)
+GA2 <- subset(GA2, age>0)
+setDF(GA2)
 
 
 #head(GA)
@@ -171,7 +172,7 @@ GA2$AgeDic<-as.factor(GA2$AgeDic)
 
 ################################## PLOTS #######################################
 
-pdf(paste(directory, "graphs_", nameFile, ".pdf",sep="")) # Open a pdf file
+pdf(paste(directory, "graphs_", nameFile, ".pdf", sep="")) # Open a pdf file
 
 
 ##Help plot
@@ -260,9 +261,12 @@ dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="D
 ########## LAST GENRATION ##########
 
 
-plot(GA2$Help, GA2$Dispersal, col=c("blue","green")[GA2$AgeDic],  xlab="Help", ylab="Dispersal") 
-legend(x="bottomright", legend = levels(GA2$AgeDic), col=c("blue","green"), pch=1)
+plot(GA2$Help, GA2$Dispersal, col=GA2$replica,  xlab="Help", ylab="Dispersal") 
 title("Dispersal vs Help")
+
+#plot(GA2$Help, GA2$Dispersal, col=c("blue","green")[GA2$AgeDic],  xlab="Help", ylab="Dispersal") 
+#legend(x="bottomright", legend = levels(GA2$AgeDic), col=c("blue","green"), pch=1)
+#title("Dispersal vs Help")
 
 
 par(mfrow = c(1, 1))
@@ -275,11 +279,5 @@ dev.off() # Close the pdf file
 
 #########################################################################################################################################
 
-
-
-
-
-#library("XLConnectJars")
-#library("XLConnect")
 
 
