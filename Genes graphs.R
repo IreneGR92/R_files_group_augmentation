@@ -1,22 +1,25 @@
 rm(list=ls())
 
-library("ggplot2")
-library("gtable")
-library("grid")
-library("gridExtra")
-library("formattable")
+library(ggplot2)
+library(gtabl)
+library(grid)
+library(gridExtra)
+library(formattable)
 #Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_201')
-library("rJava")
-library("xlsx")
-library("data.table")
+library(rJava)
+library(xlsx)
+library(data.table)
+library(dplyr)
 
-#directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\" 
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\"
+directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\" 
+#directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\"
 nameFile<-"helpRN_dispersal065-F2"
 
 getwd()
 setwd(paste(directory, "main",sep=""))
-Parameters<-read.table("group_augmentation_test.txt", skip=1, nrows=5)
+Parameters<-read.table("group_augmentation_test.txt", skip=1, nrows=16)
+
+Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
 GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=28)
 
 setwd(paste(directory, "last_generation",sep=""))
@@ -25,7 +28,7 @@ GA2 <- subset(GA2, age>0)
 setDF(GA2)
 
 
-#head(GA)
+#head(Parameters)
 #str(GA)
 #dim(GA)
 #View(GA)
@@ -174,6 +177,11 @@ GA2$AgeDic<-as.factor(GA2$AgeDic)
 
 pdf(paste(directory, "graphs_", nameFile, ".pdf", sep="")) # Open a pdf file
 
+##Dummy plot to print initial parameters in the simulation
+plot(0.5, 0.5,  xlab=" ", ylab=" ", type="n") 
+legend(x="bottomleft", legend = Parameters[,3], pch=1)
+title(nameFile)
+
 
 ##Help plot
 p1<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanHelp)) +
@@ -261,8 +269,8 @@ dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="D
 ########## LAST GENRATION ##########
 
 
-plot(GA2$Help, GA2$Dispersal, col=GA2$replica,  xlab="Help", ylab="Dispersal") 
-title("Dispersal vs Help")
+#plot(GA2$Help, GA2$Dispersal, col=GA2$replica,  xlab="Help", ylab="Dispersal") 
+#title("Dispersal vs Help")
 
 #plot(GA2$Help, GA2$Dispersal, col=c("blue","green")[GA2$AgeDic],  xlab="Help", ylab="Dispersal") 
 #legend(x="bottomright", legend = levels(GA2$AgeDic), col=c("blue","green"), pch=1)
