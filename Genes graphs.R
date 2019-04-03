@@ -130,9 +130,10 @@ write.xlsx(descriptives2, paste(directory, "results_", nameFile, ".xlsx",sep="")
 write.xlsx(descriptives, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "All_Results", append = TRUE)
 
 
-###################### LAST GENERATION #################################
 
-##FORMULAS
+
+###################### FORMULAS LAST GENERATION #################################
+
 
 replace_with_zero_if_below_zero <- function(x) {
   x <- ifelse(x<0,0,x)
@@ -173,7 +174,7 @@ GA2$AgeDic<-as.factor(GA2$AgeDic)
 
 
 
-################################## PLOTS #######################################
+########################################## PLOTS ##############################################################
 
 pdf(paste(directory, "graphs_", nameFile, ".pdf", sep="")) # Open a pdf file
 
