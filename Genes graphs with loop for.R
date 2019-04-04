@@ -196,11 +196,12 @@ GA2$AgeDic<-as.factor(GA2$AgeDic)
 
 pdf(paste(directory, "graphs_", nameFile, ".pdf", sep="")) # Open a pdf file
 
-##Dummy plot to print initial parameters in the simulation
-#plot(0.5, 0.5,  xlab=" ", ylab=" ", type="n")
-#legend(x="bottomleft", legend = Parameters[,3], pch=1)
-#title(nameFile)
-
+#Dummy plot to print initial parameters in the simulation
+par(mfrow = c(3, 2))
+plot(0.5, 0.5,  xlab=" ", ylab=" ", type="n")
+legend(x="bottomleft", legend = Parameters[,3], pch=1)
+title(nameFile)
+par(mfrow = c(1, 1))
 
 ##Help plot
 p1<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanHelp)) +
@@ -224,7 +225,8 @@ p3<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanSurvival)) +
   geom_ribbon(aes(ymin=GA_means$meanSurvival-GA_SD$meanSurvival, ymax=GA_means$meanSurvival+GA_SD$meanSurvival),
               alpha=0.3) +
   geom_line(color="black", size=1)+
-  xlab("Generation")+ ylab("Survival")
+  xlab("Generation")+ ylab("Survival")+
+  coord_cartesian(ylim = c(0.049, 1))
 
 ##Relatedness plot
 p4<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Relatedness)) +
