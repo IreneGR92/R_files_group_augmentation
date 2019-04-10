@@ -32,13 +32,13 @@ nameFile<-substring(nameFile, 20)
 
 
 setwd(paste(directory, "main",sep=""))
-#Parameters<-read.table("group_augmentation_test.txt", skip=1, nrows=16)
-#Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
-GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=28)
+Parameters<-read.table("group_augmentation_test.txt", skip=1, nrows=19)
+Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
+GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=20)
 
 #Last generation
 setwd(paste(directory, "last_generation",sep=""))
-GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=28) 
+GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=20) 
 GA2 <- subset(GA2, age>0)
 setDF(GA2)
 
@@ -46,7 +46,7 @@ setDF(GA2)
 #head(GA)
 #str(GA)
 #dim(files_main)
-#View(GA)
+#View(Parameters)
 #summary(GA)
 
 
@@ -146,6 +146,7 @@ descriptives2 <- data.frame(Variable=c( "Help","Dispersal", "Survival","Relatedn
 
 write.xlsx(descriptives2, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Results", append = FALSE)# append TRUE to create a new sheet in the same file
 write.xlsx(descriptives, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "All_Results", append = TRUE)
+write.xlsx(Parameters, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Parameters", append = TRUE)
 
 
 
@@ -197,7 +198,7 @@ GA2$AgeDic<-as.factor(GA2$AgeDic)
 pdf(paste(directory, "graphs_", nameFile, ".pdf", sep="")) # Open a pdf file
 
 #Dummy plot to print initial parameters in the simulation
-par(mfrow = c(3, 2))
+par(mfrow = c(1, 1))
 plot(0.5, 0.5,  xlab=" ", ylab=" ", type="n")
 legend(x="bottomleft", legend = Parameters[,3], pch=1)
 title(nameFile)
