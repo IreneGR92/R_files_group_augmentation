@@ -12,7 +12,7 @@ library(data.table)
 library(dplyr)
 
 #directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\"  #Work
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\"  #Home
+directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\18.03.19\\"  #Home
 
 getwd()
 
@@ -32,8 +32,8 @@ nameFile<-substring(nameFile, 20)
 
 
 setwd(paste(directory, "main",sep=""))
-Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=17)
-Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
+#Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=19)
+#Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
 GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=28)
 
 #Last generation
@@ -58,7 +58,8 @@ proportions_floaters_breeder<-function(){
 GA$propFloatBreeder <- proportions_floaters_breeder()
 
 if(GA$meanDispersal==-1)GA[GA$meanDispersal==-1,]$meanDispersal<-NaN
-if(GA$meanSurvival==-1)GA[GA$meanSurvival==-1,]$meanSurvival<-NaN
+if(GA$meanHelp==-1)GA[GA$meanHelp==-1,]$meanHelp<-NaN
+#if(GA$meanSurvival==-1)GA[GA$meanSurvival==-1,]$meanSurvival<-NaN
 
 
 ##Means between replicas
@@ -146,7 +147,7 @@ descriptives2 <- data.frame(Variable=c( "Help","Dispersal", "Survival","Relatedn
 
 write.xlsx(descriptives2, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Results", append = FALSE)# append TRUE to create a new sheet in the same file
 write.xlsx(descriptives, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "All_Results", append = TRUE)
-write.xlsx(Parameters, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Parameters", append = TRUE)
+#write.xlsx(Parameters, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Parameters", append = TRUE)
 
 
 
@@ -198,11 +199,11 @@ GA2$AgeDic<-as.factor(GA2$AgeDic)
 pdf(paste(directory, "graphs_", nameFile, ".pdf", sep="")) # Open a pdf file
 
 #Dummy plot to print initial parameters in the simulation
-par(mfrow = c(1, 1))
-plot(0.5, 0.5,  xlab=" ", ylab=" ", type="n")
-legend(x="bottomleft", legend = Parameters[,3], pch=1)
-title(nameFile)
-par(mfrow = c(1, 1))
+#par(mfrow = c(1, 1))
+#plot(0.5, 0.5,  xlab=" ", ylab=" ", type="n")
+#legend(x="bottomleft", legend = Parameters[,3], pch=1)
+#title(nameFile)
+#par(mfrow = c(1, 1))
 
 ##Help plot
 p1<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanHelp)) +
@@ -222,12 +223,12 @@ p2<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanDispersal)) +
   coord_cartesian(ylim = c(0.049, 1))
 
 ##Survival
-p3<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanSurvival)) +
-  geom_ribbon(aes(ymin=GA_means$meanSurvival-GA_SD$meanSurvival, ymax=GA_means$meanSurvival+GA_SD$meanSurvival),
-              alpha=0.3) +
-  geom_line(color="black", size=1)+
-  xlab("Generation")+ ylab("Survival")+
-  coord_cartesian(ylim = c(0.049, 1))
+#p3<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanSurvival)) +
+#  geom_ribbon(aes(ymin=GA_means$meanSurvival-GA_SD$meanSurvival, ymax=GA_means$meanSurvival+GA_SD$meanSurvival),
+#              alpha=0.3) +
+#  geom_line(color="black", size=1)+
+#  xlab("Generation")+ ylab("Survival")+
+#  coord_cartesian(ylim = c(0.049, 1))
 
 ##Relatedness plot
 p4<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Relatedness)) +
@@ -264,7 +265,7 @@ p7<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$propFloatBreeder)) +
 
 
 
-grid.arrange(p1, p2, p6, p4, p5, p3, nrow = 3)
+grid.arrange(p1, p2, p6, p4, p5, p7, nrow = 3)
 
 
 ########### REACTION NORMS ####################
