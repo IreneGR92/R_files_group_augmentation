@@ -12,7 +12,8 @@ library(data.table)
 library(dplyr)
 
 #directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\"  #Work
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\"  #Home
+directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
+#directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\"  #Home
 
 getwd()
 
@@ -32,7 +33,7 @@ nameFile<-substring(nameFile, 20)
 
 
 setwd(paste(directory, "main",sep=""))
-Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=17)
+Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=27)
 Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
 GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=28)
 
