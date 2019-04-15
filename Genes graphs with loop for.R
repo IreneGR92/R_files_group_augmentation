@@ -33,7 +33,7 @@ nameFile<-substring(nameFile, 20)
 
 
 setwd(paste(directory, "main",sep=""))
-Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=27)
+Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=26)
 Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
 GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=28)
 
@@ -201,6 +201,7 @@ pdf(paste(directory, "graphs_", nameFile, ".pdf", sep="")) # Open a pdf file
 #Dummy plot to print initial parameters in the simulation
 par(mfrow = c(1, 1))
 plot(0.5, 0.5,  xlab=" ", ylab=" ", type="n")
+op <- par(cex = 0.9)
 legend(x="bottomleft", legend = Parameters[,3], pch=1)
 title(nameFile)
 par(mfrow = c(1, 1))
