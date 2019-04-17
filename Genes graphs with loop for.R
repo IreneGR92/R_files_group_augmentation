@@ -12,8 +12,8 @@ library(data.table)
 library(dplyr)
 
 #directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\"  #Work
-directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
-#directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\"  #Home
+#directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
+directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\"  #Home
 
 getwd()
 
@@ -82,43 +82,68 @@ GA_SD<-do_sd(GA)
 
 ##Means and SD of the means of the variables between the different replicas
 
-do_mean_LG<-function(x){
-  x<-round(mean(x[GA$Generation==100000]), digits = 4)
+do_mean_LG<-function(x,y){
+  x<-round(mean(x[GA$Generation==y]), digits = 4)
   return(x)
 }
 
-do_SD_LG<-function(x){
-  x<-round(sd(x[GA$Generation==100000]), digits = 4)
+do_SD_LG<-function(x,y){
+  x<-round(sd(x[GA$Generation==y]), digits = 4)
   return(x)
 }
 
-meanAlpha<-do_mean_LG(GA$meanAlpha)
-meanAlphaAge<-do_mean_LG(GA$meanAlphaAge)
-meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2)
-meanBeta<-do_mean_LG(GA$meanBeta)
-meanBetaAge<-do_mean_LG(GA$meanBetaAge)
-meanAge<-do_mean_LG(GA$Age)
-meanGroupSize<-do_mean_LG(GA$Group_size)
-meanHelp<-do_mean_LG(GA$meanHelp)
-meanDispersal<-do_mean_LG(GA$meanDispersal)
-meanSurvival<-do_mean_LG(GA$meanSurvival)
-meanRelatedness<-do_mean_LG(GA$Relatedness)
-meanCorr_Help_Disp<-do_mean_LG(GA$corr_Help_Disp)
-meanPropFloatBreeder<-do_mean_LG(GA$propFloatBreeder)
+gen_with_help<-100000
+gen_without_help<-25000
 
-SD_Alpha<-do_SD_LG(GA$meanAlpha)
-SD_AlphaAge<-do_SD_LG(GA$meanAlphaAge)
-SD_AlphaAge2<-do_SD_LG(GA$meanAlphaAge2)
-SD_Beta<-do_SD_LG(GA$meanBeta)
-SD_BetaAge<-do_SD_LG(GA$meanBetaAge)
-SD_Age<-do_SD_LG(GA$Age)
-SD_GroupSize<-do_SD_LG(GA$Group_size)
-SD_Help<-do_SD_LG(GA$meanHelp)
-SD_Dispersal<-do_SD_LG(GA$meanDispersal)
-SD_Survival<-do_SD_LG(GA$meanSurvival)
-SD_Relatedness<-do_SD_LG(GA$Relatedness)
-SDcorr_Help_Disp<-do_SD_LG(GA$corr_Help_Disp)
-SD_PropFloatBreeder<-do_SD_LG(GA$propFloatBreeder)
+#For the las generation, after the evolution of help
+meanAlpha<-do_mean_LG(GA$meanAlpha, gen_with_help)
+meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, gen_with_help)
+meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, gen_with_help)
+meanBeta<-do_mean_LG(GA$meanBeta, gen_with_help)
+meanBetaAge<-do_mean_LG(GA$meanBetaAge, gen_with_help)
+meanAge<-do_mean_LG(GA$Age, gen_with_help)
+meanGroupSize<-do_mean_LG(GA$Group_size, gen_with_help)
+meanHelp<-do_mean_LG(GA$meanHelp, gen_with_help)
+meanDispersal<-do_mean_LG(GA$meanDispersal, gen_with_help)
+meanSurvival<-do_mean_LG(GA$meanSurvival, gen_with_help)
+meanRelatedness<-do_mean_LG(GA$Relatedness, gen_with_help)
+meanCorr_Help_Disp<-do_mean_LG(GA$corr_Help_Disp, gen_with_help)
+meanPropFloatBreeder<-do_mean_LG(GA$propFloatBreeder, gen_with_help)
+
+SD_Alpha<-do_SD_LG(GA$meanAlpha, gen_with_help)
+SD_AlphaAge<-do_SD_LG(GA$meanAlphaAge, gen_with_help)
+SD_AlphaAge2<-do_SD_LG(GA$meanAlphaAge2, gen_with_help)
+SD_Beta<-do_SD_LG(GA$meanBeta, gen_with_help)
+SD_BetaAge<-do_SD_LG(GA$meanBetaAge, gen_with_help)
+SD_Age<-do_SD_LG(GA$Age, gen_with_help)
+SD_GroupSize<-do_SD_LG(GA$Group_size, gen_with_help)
+SD_Help<-do_SD_LG(GA$meanHelp, gen_with_help)
+SD_Dispersal<-do_SD_LG(GA$meanDispersal, gen_with_help)
+SD_Survival<-do_SD_LG(GA$meanSurvival, gen_with_help)
+SD_Relatedness<-do_SD_LG(GA$Relatedness, gen_with_help)
+SDcorr_Help_Disp<-do_SD_LG(GA$corr_Help_Disp, gen_with_help)
+SD_PropFloatBreeder<-do_SD_LG(GA$propFloatBreeder, gen_with_help)
+
+#For the las generation before the evolution of help
+meanBetaNH<-do_mean_LG(GA$meanBeta, gen_without_help)
+meanBetaAgeNH<-do_mean_LG(GA$meanBetaAge, gen_without_help)
+meanAgeNH<-do_mean_LG(GA$Age, gen_without_help)
+meanGroupSizeNH<-do_mean_LG(GA$Group_size, gen_without_help)
+meanHelpNH<-do_mean_LG(GA$meanHelp, gen_without_help)
+meanDispersalNH<-do_mean_LG(GA$meanDispersal, gen_without_help)
+meanSurvivalNH<-do_mean_LG(GA$meanSurvival, gen_without_help)
+meanRelatednessNH<-do_mean_LG(GA$Relatedness, gen_without_help)
+meanPropFloatBreederNH<-do_mean_LG(GA$propFloatBreeder, gen_without_help)
+
+SD_BetaNH<-do_SD_LG(GA$meanBeta, gen_without_help)
+SD_BetaAgeNH<-do_SD_LG(GA$meanBetaAge, gen_without_help)
+SD_AgeNH<-do_SD_LG(GA$Age, gen_without_help)
+SD_GroupSizeNH<-do_SD_LG(GA$Group_size, gen_without_help)
+SD_HelpNH<-do_SD_LG(GA$meanHelp, gen_without_help)
+SD_DispersalNH<-do_SD_LG(GA$meanDispersal, gen_without_help)
+SD_SurvivalNH<-do_SD_LG(GA$meanSurvival, gen_without_help)
+SD_RelatednessNH<-do_SD_LG(GA$Relatedness, gen_without_help)
+SD_PropFloatBreederNH<-do_SD_LG(GA$propFloatBreeder, gen_without_help)
 
 
 
@@ -126,27 +151,28 @@ descriptives <- data.frame(Variable=c("alpha", "alphaAge", "alphaAge2",
                                       "beta", "betaAge", "age", "Group_size",
                                       "Help","Dispersal", "Survival", "Relatedness",
                                       "Help_Disp", "propFloaterB"),
-                           #A=c("=","=","=","=","=","=","=","=","=","=","=","="),
                            Mean=c(meanAlpha, meanAlphaAge, meanAlphaAge2,
                                   meanBeta, meanBetaAge, meanAge,meanGroupSize,
                                   meanHelp,meanDispersal,meanSurvival,meanRelatedness,
                                   meanCorr_Help_Disp, meanPropFloatBreeder),
-                           #B=c("±","±","±","±","±","±","±","±","±","±","±","±"),
                            SD=c(SD_Alpha,SD_AlphaAge,SD_AlphaAge2,
                                 SD_Beta,SD_BetaAge,SD_Age, SD_GroupSize,
                                 SD_Help,SD_Dispersal,SD_Survival,SD_Relatedness,
                                 SDcorr_Help_Disp, SD_PropFloatBreeder))
 
-descriptives2 <- data.frame(Variable=c( "Help","Dispersal", "Survival","Relatedness",
-                                        "Group_size","Help_Disp"),
-                           Mean=c(meanHelp, meanDispersal,meanSurvival, meanRelatedness,
-                                  meanGroupSize, meanCorr_Help_Disp),
-                           SD=c(SD_Help,SD_Dispersal,SD_Survival,SD_Relatedness,
-                                SD_GroupSize, SDcorr_Help_Disp))
+descriptivesNH <- data.frame(Variable=c("beta", "betaAge", "age", "Group_size",
+                                      "Help","Dispersal", "Survival", "Relatedness",
+                                      "propFloaterB"),
+                           Mean=c(meanBetaNH, meanBetaAgeNH, meanAgeNH,meanGroupSizeNH,
+                                  meanHelpNH,meanDispersalNH,meanSurvivalNH,meanRelatednessNH,
+                                  meanPropFloatBreederNH),
+                           SD=c(SD_BetaNH,SD_BetaAgeNH,SD_AgeNH, SD_GroupSizeNH,
+                                SD_HelpNH,SD_DispersalNH,SD_SurvivalNH,SD_RelatednessNH,
+                                SD_PropFloatBreederNH))
 
 
-write.xlsx(descriptives2, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Results", append = FALSE)# append TRUE to create a new sheet in the same file
-write.xlsx(descriptives, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "All_Results", append = TRUE)
+write.xlsx(descriptives, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Results", append = FALSE)# append TRUE to create a new sheet in the same file
+write.xlsx(descriptivesNH, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Result before help", append = TRUE)
 write.xlsx(Parameters, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Parameters", append = TRUE)
 
 
