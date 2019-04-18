@@ -1,7 +1,7 @@
 rm(list=ls())
 getwd()
-setwd('H:\\PhD\\CODE\\All_results')
-#setwd('C:\\Users\\igaru\\OneDrive\\PhD\\CODE\\R_files')
+setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
+#setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
 results<-read.table("results_R-NRN.csv",header = TRUE, sep=";")
 
 #head(results)
@@ -83,3 +83,4 @@ p3<-ggplot(results,
 
 
 grid.arrange(p1, p2, p3, nrow = 3)
+

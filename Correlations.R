@@ -1,8 +1,8 @@
 rm(list=ls())
 getwd()
-setwd('H:\\PhD\\CODE\\All_results')
-#setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results')
-results<-read.table("Correlations.csv",header = TRUE, sep=";")
+setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
+#setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
+results<-read.table("Correlations-NRN.csv",header = TRUE, sep=";")
 
 
 library(ggpubr)
