@@ -11,7 +11,7 @@ library(xlsx)
 library(data.table)
 library(dplyr)
 
-directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\Xn0\\"  #Work
+directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\"  #Work
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
 #directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\"  #Home
 
@@ -146,34 +146,70 @@ SD_SurvivalNH<-do_SD_LG(GA$meanSurvival, gen_without_help)
 SD_RelatednessNH<-do_SD_LG(GA$Relatedness, gen_without_help)
 SD_PropFloatBreederNH<-do_SD_LG(GA$propFloatBreeder, gen_without_help)
 
+#For each replica
+meanAlphaR<-GA$meanAlpha[GA$Generation==100000]
+meanAlphaAgeR<-GA$meanAlphaAge[GA$Generation==100000]
+meanAlphaAge2R<-GA$meanAlphaAge2[GA$Generation==100000]
+meanBetaR<-GA$meanBeta[GA$Generation==100000]
+meanBetaAgeR<-GA$meanBetaAge[GA$Generation==100000]
+meanAgeR<-GA$Age[GA$Generation==100000]
+meanGroupSizeR<-GA$Group_size[GA$Generation==100000]
+meanHelpR<-GA$meanHelp[GA$Generation==100000]
+meanDispersalR<-GA$meanDispersal[GA$Generation==100000]
+meanSurvivalR<-GA$meanSurvival[GA$Generation==100000]
+meanRelatednessR<-GA$Relatedness[GA$Generation==100000]
+meanCorr_Help_DispR<-GA$corr_Help_Disp[GA$Generation==100000]
+meanPropFloatBreederR<-GA$propFloatBreeder[GA$Generation==100000]
+
 
 
 descriptives <- data.frame(Variable=c("alpha", "alphaAge", "alphaAge2",
-                                      "beta", "betaAge", "age", "Group_size",
+                                      "beta", "betaAge", 
                                       "Help","Dispersal", "Survival", "Relatedness",
+                                      "age", "Group_size",
                                       "Help_Disp", "propFloaterB"),
                            Mean=c(meanAlpha, meanAlphaAge, meanAlphaAge2,
-                                  meanBeta, meanBetaAge, meanAge,meanGroupSize,
+                                  meanBeta, meanBetaAge, 
                                   meanHelp,meanDispersal,meanSurvival,meanRelatedness,
+                                  meanAge,meanGroupSize,
                                   meanCorr_Help_Disp, meanPropFloatBreeder),
                            SD=c(SD_Alpha,SD_AlphaAge,SD_AlphaAge2,
-                                SD_Beta,SD_BetaAge,SD_Age, SD_GroupSize,
+                                SD_Beta,SD_BetaAge,
                                 SD_Help,SD_Dispersal,SD_Survival,SD_Relatedness,
+                                SD_Age, SD_GroupSize,
                                 SDcorr_Help_Disp, SD_PropFloatBreeder))
 
-descriptivesNH <- data.frame(Variable=c("beta", "betaAge", "age", "Group_size",
+descriptivesNH <- data.frame(Variable=c("beta", "betaAge", 
                                       "Help","Dispersal", "Survival", "Relatedness",
-                                      "propFloaterB"),
-                           Mean=c(meanBetaNH, meanBetaAgeNH, meanAgeNH,meanGroupSizeNH,
+                                      "age", "Group_size","propFloaterB"),
+                           Mean=c(meanBetaNH, meanBetaAgeNH, 
                                   meanHelpNH,meanDispersalNH,meanSurvivalNH,meanRelatednessNH,
-                                  meanPropFloatBreederNH),
-                           SD=c(SD_BetaNH,SD_BetaAgeNH,SD_AgeNH, SD_GroupSizeNH,
+                                  meanAgeNH,meanGroupSizeNH,meanPropFloatBreederNH),
+                           SD=c(SD_BetaNH,SD_BetaAgeNH,
                                 SD_HelpNH,SD_DispersalNH,SD_SurvivalNH,SD_RelatednessNH,
-                                SD_PropFloatBreederNH))
+                                SD_AgeNH, SD_GroupSizeNH,SD_PropFloatBreederNH))
+
+
+
+descriptivesR <- data.frame( ID=c(nameFile),
+                             X0=c(Parameters[8,2]),
+                             Xh=c(Parameters[9,2]),
+                             Xn=c(Parameters[10,2]),
+                             K1=c(Parameters[12,2]),
+                             Bias=c(Parameters[7,2]),
+                             Help=c(meanHelpR),
+                             Dispersal=c(meanDispersalR),
+                             Survival=c(meanSurvivalR),
+                             Relatedness=c(meanRelatednessR),
+                             Age=c(meanAgeR),
+                             Group_size=c(meanGroupSizeR),
+                             Help_Disp=c(meanCorr_Help_DispR),
+                             propFloaterB=c(meanPropFloatBreederR))
 
 
 write.xlsx(descriptives, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Results", append = FALSE)# append TRUE to create a new sheet in the same file
 write.xlsx(descriptivesNH, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Result before help", append = TRUE)
+write.xlsx(descriptivesR, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Result per replica", append = TRUE)
 write.xlsx(Parameters, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Parameters", append = TRUE)
 
 
