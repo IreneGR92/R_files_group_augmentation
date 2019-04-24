@@ -1,6 +1,6 @@
 rm(list=ls())
 getwd()
-setwd('H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\Excels')
+setwd('H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\Results')
 #setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
 results<-read.table("ANOVA.csv",header = TRUE, sep=";")
 
@@ -34,7 +34,7 @@ ggboxplot(results, x = "Xn", y = "Help", color = "X0",
 
 #ANOVA
 
-results_ANOVA <- aov(Help ~ X0 + Xh + Xn + K1, data = results)
+results_ANOVA <- aov(Help ~ X0 + Xh + Xn + K1 + Bias, data = results)
 summary(results_ANOVA)
 
 #Tukey multiple pairwise-comparisons
