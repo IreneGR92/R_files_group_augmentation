@@ -301,29 +301,30 @@ grid.arrange(p1, p2, p6, p4, p5, p3, nrow = 3)
 # grid<-matrix(c(1,2),nrow=1,ncol=2)
 # layout(grid)
 par(mfrow = c(3, 2))
-# age<-seq(from=1,by=1, length=11)
-# 
-# # HELP
-# 
-# replace_with_zero_if_below_zero <- function(x) {
-#   x <- ifelse(x<0,0,x)
-#   return(x)
-# }
-# 
-# help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
-#   help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
-#   help<-ifelse(help<0,0,help)
-#   return(help)}
-# 
-# helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
-# 
-# 
-# # DISPERSAL
-# 
-# dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
-# dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
-# 
-# 
+age<-seq(from=1,by=1, length=11)
+
+# HELP
+if(Parameters[1,2]==1){
+replace_with_zero_if_below_zero <- function(x) {
+  x <- ifelse(x<0,0,x)
+  return(x)
+}
+
+help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
+  help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
+  help<-ifelse(help<0,0,help)
+  return(help)}
+
+helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
+}
+
+# DISPERSAL
+
+if(Parameters[2,2]==1){
+dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
+dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
+}
+
 
 
 ########## LAST GENRATION ##########
