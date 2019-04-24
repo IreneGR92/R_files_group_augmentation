@@ -11,9 +11,9 @@ library(xlsx)
 library(data.table)
 library(dplyr)
 
-#directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\"  #Work
+directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\Xn0\\"  #Work
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\"  #Home
+#directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\"  #Home
 
 getwd()
 
@@ -44,7 +44,8 @@ GA2 <- subset(GA2, age>0)
 setDF(GA2)
 
 
-#head(GA)
+#head(GA2)
+#tail(GA2)
 #str(GA)
 #dim(files_main)
 #View(Parameters)
@@ -300,36 +301,44 @@ grid.arrange(p1, p2, p6, p4, p5, p3, nrow = 3)
 # grid<-matrix(c(1,2),nrow=1,ncol=2)
 # layout(grid)
 par(mfrow = c(3, 2))
-age<-seq(from=1,by=1, length=11)
-
-# HELP
-
-replace_with_zero_if_below_zero <- function(x) {
-  x <- ifelse(x<0,0,x)
-  return(x)
-}
-
-help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
-  help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
-  help<-ifelse(help<0,0,help)
-  return(help)}
-
-helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
-
-
-# DISPERSAL
-
-dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
-dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
-
-
+# age<-seq(from=1,by=1, length=11)
+# 
+# # HELP
+# 
+# replace_with_zero_if_below_zero <- function(x) {
+#   x <- ifelse(x<0,0,x)
+#   return(x)
+# }
+# 
+# help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
+#   help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
+#   help<-ifelse(help<0,0,help)
+#   return(help)}
+# 
+# helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
+# 
+# 
+# # DISPERSAL
+# 
+# dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
+# dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
+# 
+# 
 
 
 ########## LAST GENRATION ##########
-
+j=1
+relatedness_values<-GA$Relatedness[GA$Generation==100000]
+while(j<21){
+    GA2$Relatedness[GA2$replica == j] <- relatedness_values[j]
+  j<-j+1
+}
 
 plot(GA2$Help, GA2$Dispersal, col=GA2$replica,  xlab="Help", ylab="Dispersal")
 title("Dispersal vs Help")
+
+plot(GA2$Help, GA2$Relatedness, col=GA2$replica,  xlab="Help", ylab="Relatedness")
+title("Relatedness vs Help")
 
 #plot(GA2$Help, GA2$Dispersal, col=c("blue","green")[GA2$AgeDic],  xlab="Help", ylab="Dispersal")
 #legend(x="bottomright", legend = levels(GA2$AgeDic), col=c("blue","green"), pch=1)
