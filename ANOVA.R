@@ -1,19 +1,20 @@
 rm(list=ls())
 getwd()
-setwd('H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\Results')
-#setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
+#setwd('H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\Results')
+setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\Results')
 results<-read.table("ANOVA.csv",header = TRUE, sep=";")
 
-#head(results)
-str(results)
-#View(esmd)
-#summary(results)
 
 results$X0<-as.factor(results$X0)
 results$Xh<-as.factor(results$Xh)
 results$Xn<-as.factor(results$Xn)
 results$K1<-as.factor(results$K1)
 results$Bias<-as.factor(results$Bias)
+
+#head(results)
+str(results)
+#View(esmd)
+#summary(results)
 
 #Means and summary statistics by group
 
@@ -46,12 +47,12 @@ sumBias_H <- summarySE(results,
                  measurevar="Help", 
                  groupvars=c("Bias"))
 
-sumAll
-sumX0
-sumXh
-sumXn
-sumK1
-sumBias
+sumAll_H
+sumX0_H
+sumXh_H
+sumXn_H
+sumK1_H
+sumBias_H
 
 
 
@@ -154,3 +155,75 @@ summary(results_ANOVA_Relatedness)
 TukeyHSD(results_ANOVA, which = "Xn")
 
 
+
+
+#Correlations
+
+library(ggpubr)
+library("ggplot2")
+library("gtable")
+library("grid")
+library("gridExtra")
+
+
+
+g1<-ggscatter(results, x = "Relatedness", y = "Help", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Relatedness", ylab = "Help")
+
+
+g2<-ggscatter(results, x = "Relatedness", y = "Dispersal", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Relatedness", ylab = "Dispersal")
+g2<-ggpar(g2, ylim = c(0.0, 1))
+
+
+g3<-ggscatter(results, x = "Help", y = "Dispersal", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Help", ylab = "Dispersal")
+g3<-ggpar(g3, ylim = c(0.0, 1))
+
+
+g4<-ggscatter(results, x = "Help", y = "Group_size", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Help", ylab = "Group size")
+
+
+g5<-ggscatter(results, x = "Group_size", y = "Dispersal", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Group size", ylab = "Dispersal")
+g5<-ggpar(g5, ylim = c(0, 1))
+
+
+g6<-ggscatter(results, x = "Relatedness", y = "Group_size", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Relatedness", ylab = "Group size")
+
+g7<-ggscatter(results, x = "Relatedness", y = "Help_Disp", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Relatedness", ylab = "Help-Dispersal")
+
+g8<-ggscatter(results, x = "Survival", y = "Help", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Survival", ylab = "Help")
+
+g9<-ggscatter(results, x = "Survival", y = "Dispersal", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Survival", ylab = "Dispersal")
+
+g10<-ggscatter(results, x = "Survival", y = "Relatedness", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Survival", ylab = "Relatedness")
+
+
+grid.arrange(g1, g2, g3, g4, g5, g6, g7,g8, g9,g10, nrow = 5)
