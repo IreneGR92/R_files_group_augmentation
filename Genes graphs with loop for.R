@@ -10,6 +10,7 @@ library(rJava)
 library(xlsx)
 library(data.table)
 library(dplyr)
+library(ggpubr)
 
 directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\"  #Work
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
@@ -244,13 +245,10 @@ GA2[GA2$type==0,]$Dispersal<-NA
 
 ##Age
 mean_age<-mean(GA2$age)
-
-
 dichotonomic_age <- function(x) {
   x <- ifelse(x<mean_age,"< mean age","> mean age")
   return(x)
 }
-
 GA2$AgeDic<-dichotonomic_age(GA2$age)
 GA2$AgeDic<-as.factor(GA2$AgeDic)
 
@@ -364,6 +362,26 @@ dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="D
 
 
 ########## LAST GENRATION ##########
+
+GA2$age_f<-as.factor(GA2$age)
+GA2<-na.omit(GA2)
+
+
+helpBoxP<-ggboxplot(GA2, x = "age_f", y = "Help", 
+          add = "jitter", add.params = list(color = "grey", alpha=0.2),#instead of grey you can put a factor
+          color = "black",
+          xlab = "Age", ylab = "Help", title =  "Level of help by age",ylim=c(0.1,2),
+          palette = "aaas")
+
+
+dispersalBoxP<-ggboxplot(GA2, x = "age_f", y = "dispersal", 
+          add = "jitter", add.params = list(color = "grey", alpha=0.2),#instead of grey you can put a factor
+          color = "black",
+          xlab = "Age", ylab = "Dispersal", title =  "Level of dispersal by age",ylim=c(0,1),
+          palette = "aaas")
+
+grid.arrange(helpBoxP, dispersalBoxP, nrow = 2, ncol=2)
+
 j=1
 relatedness_values<-GA$Relatedness[GA$Generation==100000]
 while(j<21){
@@ -371,7 +389,7 @@ while(j<21){
   j<-j+1
 }
 
-plot(GA2$Help, GA2$Dispersal, col=GA2$replica,  xlab="Help", ylab="Dispersal")
+plot(GA2$Help, GA2$dispersal, col=GA2$replica,  xlab="Help", ylab="Dispersal")
 title("Dispersal vs Help")
 
 plot(GA2$Help, GA2$Relatedness, col=GA2$replica,  xlab="Help", ylab="Relatedness")
@@ -381,9 +399,14 @@ title("Relatedness vs Help")
 #legend(x="bottomright", legend = levels(GA2$AgeDic), col=c("blue","green"), pch=1)
 #title("Dispersal vs Help")
 
+#plot(GA2$age, GA2$Help, col=GA2$replica,  xlab="Age", ylab="Help")
+#title("Help vs Age")
+
+#plot(GA2$age, GA2$dispersal, col=GA2$replica,  xlab="Age", ylab="dispersal")
+#title("Dispersal vs Age")
+
 
 par(mfrow = c(1, 1))
-
 
 dev.off() # Close the pdf file
 
