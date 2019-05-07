@@ -51,10 +51,18 @@ fitMeasures(mod1.fit, "cfi") # CFI(goodness of fit)
 ## Examine Modification Indices
 subset(modindices(mod1.fit), mi > 3.8) #3.84(criterion),  measures how much chi-square will drop if included. 
 # between-indicator effects only
-ord.dat.reg<-subset(modindices(mod1.fit))
+ord.dat.reg<-subset(modindices(mod1.fit), mi > 3.8 & op == "~")
 ord.dat.reg[order(ord.dat.reg$mi),]
 # error correlations only
 ord.dat.cor<-subset(modindices(mod1.fit), mi > 3.8 & op == "~~")
+ord.dat.cor[order(ord.dat.cor$mi),]
+
+##Non significant
+# between-indicator effects only
+ord.dat.reg<-subset(modindices(mod1.fit), mi < 3.8 & op == "~")
+ord.dat.reg[order(ord.dat.reg$mi),]
+# error correlations only
+ord.dat.cor<-subset(modindices(mod1.fit), mi < 3.8 & op == "~~")
 ord.dat.cor[order(ord.dat.cor$mi),]
 
 
