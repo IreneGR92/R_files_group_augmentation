@@ -12,7 +12,8 @@ library(data.table)
 library(dplyr)
 library(ggpubr)
 
-directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\"  #Work
+directory<-"~/git/Group-augmentation-RN/Results/" #Linux
+#directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\"  #Work
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
 #directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\"  #Home
 
@@ -34,18 +35,18 @@ nameFile<-substring(nameFile, 20)
 
 
 setwd(paste(directory, "main",sep=""))
-Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=26)
+Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=29)
 Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
-GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=28)
+GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=30)
 
 #Last generation
 setwd(paste(directory, "last_generation",sep=""))
-GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=28) 
+GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=30) 
 GA2 <- subset(GA2, age>0)
 setDF(GA2)
 
 
-#head(GA2)
+#head(GA)
 #tail(GA2)
 #str(GA)
 #dim(files_main)
@@ -55,7 +56,7 @@ setDF(GA2)
 
 
 proportions_floaters_breeder<-function(){
-  propFloatBreeder <- GA$newbreederFloater / (GA$newbreederFloater + GA$newbreederHelper)
+  propFloatBreeder <- GA$newBreederFloater / (GA$newBreederFloater + GA$newBreederHelper)
   return(propFloatBreeder)}
 
 GA$propFloatBreeder <- proportions_floaters_breeder()
@@ -97,7 +98,7 @@ do_SD_LG<-function(x,y){
 gen_with_help<-100000
 gen_without_help<-25000
 
-#For the las generation, after the evolution of help
+#For the last generation, after the evolution of help
 meanAlpha<-do_mean_LG(GA$meanAlpha, gen_with_help)
 meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, gen_with_help)
 meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, gen_with_help)
@@ -193,11 +194,11 @@ descriptivesNH <- data.frame(Variable=c("beta", "betaAge",
 
 
 descriptivesR <- data.frame( ID=c(nameFile),
-                             X0=c(Parameters[8,2]),
-                             Xh=c(Parameters[9,2]),
-                             Xn=c(Parameters[10,2]),
-                             K1=c(Parameters[12,2]),
-                             Bias=c(Parameters[7,2]),
+                             X0=c(Parameters[11,2]),
+                             Xh=c(Parameters[12,2]),
+                             Xn=c(Parameters[13,2]),
+                             K1=c(Parameters[15,2]),
+                             Bias=c(Parameters[10,2]),
                              Help=c(meanHelpR),
                              Dispersal=c(meanDispersalR),
                              Survival=c(meanSurvivalR),
@@ -262,7 +263,7 @@ pdf(paste(directory, "graphs_", nameFile, ".pdf", sep="")) # Open a pdf file
 #Dummy plot to print initial parameters in the simulation
 par(mfrow = c(1, 1))
 plot(0.5, 0.5,  xlab=" ", ylab=" ", type="n")
-op <- par(cex = 0.9)
+op <- par(cex = 0.79)
 legend(x="bottomleft", legend = Parameters[,3], pch=1)
 title(nameFile)
 par(mfrow = c(1, 1))
