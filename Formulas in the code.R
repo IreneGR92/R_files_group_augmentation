@@ -26,6 +26,9 @@ ggplot(mdf, aes(x=Age, y=Dispersal.values,col=Input)) +
 
 #HELP
 
+library(ggplot2)
+library(reshape2)
+
 age<-seq(from=1,by=1, length=15)
 
 help_Formula<-function(alpha, alphaAge, alphaAge2){
@@ -41,7 +44,7 @@ names(mdf)<-c("Age", "Input", "Help.values")
 ggplot(mdf, aes(x=Age, y=Help.values,col=Input)) +
   geom_line(size=1)+
   xlab("Age")+ ylab("Help")+
-  scale_color_manual(values = c("green","blue", "purple", "red", "orange"))+
+  scale_color_manual(values = c("green","blue", "purple", "red"))+
   coord_cartesian(ylim = c(0.049, 10))
 
 
@@ -129,6 +132,9 @@ survivalTest
 
 #FECUNDITY
 
+library(ggplot2)
+library(reshape2)
+
 K0<-1
 cumhelp<-c(0:5)
 
@@ -136,6 +142,20 @@ fecundity_Formula <- function(K0,K1) {
   fecundity <- (K0 + cumhelp*K1 / (1 + cumhelp*K1))
   return(fecundity)
 }
+
+DF.fecundity<-data.frame(cumhelp, fecundity_Formula(1,2), fecundity_Formula(1,1), fecundity_Formula(1,0.5))
+names(DF.fecundity) <- c("Cumulative_help","K1=2","K1=1", "K1=0.5")
+mdf <- melt(DF.fecundity, id="Cumulative_help")
+names(mdf)<-c("Cumulative_help", "Input", "Fecundity.values")
+
+ggplot(mdf, aes(x=Cumulative_help, y=Fecundity.values,col=Input)) +
+  geom_line(size=1)+
+  xlab("Cummulative help in group")+ ylab("Fecundity")+
+  scale_color_manual(values = c("green","blue", "red", "orange"))+
+  coord_cartesian(ylim = c(1, 2))
+
+
+
 
 plot(cumhelp,fecundity_Formula(1,2), type="l", col="red", lwd=3, xlab="cumhelp", ylab="fecundity")
 lines(cumhelp, fecundity_Formula(1,1), type="l", col="blue", lwd=3)
