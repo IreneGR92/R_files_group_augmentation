@@ -14,8 +14,8 @@ results$Bias<-as.factor(results$Bias)
 str(results)
 
 
-#sub<-subset(results, Help >1.75)
-#View(sub)
+sub<-subset(results, Help >1.75)
+View(sub)
 
 
 ######################################### T TEST  #####################################################3
@@ -23,6 +23,8 @@ str(results)
 t.test(results$Help~results$Bias)
 t.test(results$Dispersal~results$Bias)
 t.test(results$Relatedness~results$Bias)
+t.test(results$Group_size~results$Bias)
+t.test(results$Survival~results$Bias)
 
 t.test(results$Help~results$X0)
 t.test(results$Dispersal~results$X0)
@@ -48,6 +50,15 @@ pairwise.t.test(results$Dispersal, results$Xn, p.adjust="none", pool.sd = T)
 res.aov2 <- aov(Relatedness ~ Xn, data = results)
 summary(res.aov2)
 pairwise.t.test(results$Relatedness, results$Xn, p.adjust="none", pool.sd = T) 
+
+res.aov2 <- aov(Group_size ~ Xn, data = results)
+summary(res.aov2)
+pairwise.t.test(results$Group_size, results$Xn, p.adjust="none", pool.sd = T) 
+
+res.aov2 <- aov(Survival ~ Xn, data = results)
+summary(res.aov2)
+pairwise.t.test(results$Survival, results$Xn, p.adjust="none", pool.sd = T) 
+
 
 
 
@@ -106,6 +117,17 @@ ggplot(help_summary, aes(x=Bias, y=Group_size, width=0.5)) +
   ylab("Group size")
 
 
+help_summary<-data_summary(results, varname="Survival", groupnames=c("Bias"))
+help_summary$se<-SE_formula(help_summary$sd,10)
+
+ggplot(help_summary, aes(x=Bias, y=Survival, width=0.5)) +
+  geom_bar(stat="identity", position=position_dodge())+
+  geom_errorbar(aes(ymin=Survival-se, ymax=Survival+se), width=0.1,
+                position=position_dodge(0.9))+
+  scale_fill_brewer(palette="Paired") + theme_minimal()+
+  coord_cartesian(ylim = c(0.049, 1))
+
+
 
 
 #Help vs X0
@@ -149,6 +171,33 @@ ggplot(help_summary, aes(x=Xn, y=Help, width=0.5)) +
 
 
 
+help_summary<-data_summary(results, varname="Group_size", groupnames=c("Xn")) 
+help_summary$se<-SE_formula(help_summary$sd,10)
+
+ggplot(help_summary, aes(x=Xn, y=Group_size, width=0.5)) + 
+  geom_bar(stat="identity", position=position_dodge()) +
+  geom_errorbar(aes(ymin=Group_size-se, ymax=Group_size+se), width=0.1,
+                position=position_dodge(0.9))+
+  scale_fill_brewer(palette="Paired") + theme_minimal()+
+  xlab("Benefit group size survival")+
+  ylab("Group size")
+
+
+
+help_summary<-data_summary(results, varname="Survival", groupnames=c("Xn")) 
+help_summary$se<-SE_formula(help_summary$sd,10)
+
+ggplot(help_summary, aes(x=Xn, y=Survival, width=0.5)) + 
+  geom_bar(stat="identity", position=position_dodge()) +
+  geom_errorbar(aes(ymin=Survival-se, ymax=Survival+se), width=0.1,
+                position=position_dodge(0.9))+
+  scale_fill_brewer(palette="Paired") + theme_minimal()+
+  xlab("Benefit group size survival")
+
+
+
+
+
 #Help vs K1
 
 help_summary<-data_summary(results, varname="Help", groupnames=c("K1")) 
@@ -175,7 +224,8 @@ ggplot(summary_results, aes(x=Bias, y=Dispersal, width=0.5)) +
   geom_bar(stat="identity", position=position_dodge(), fill="blue") +
   geom_errorbar(aes(ymin=Dispersal-se, ymax=Dispersal+se), width=0.1,
                 position=position_dodge(0.9))+
-  scale_fill_brewer(palette="Paired") + theme_minimal()
+  scale_fill_brewer(palette="Paired") + theme_minimal()+
+  coord_cartesian(ylim = c(0.049, 1))
 
 
 #Dispersal vs X0
@@ -189,7 +239,8 @@ ggplot(summary_results, aes(x=X0, y=Dispersal, width=0.5)) +
   geom_errorbar(aes(ymin=Dispersal-se, ymax=Dispersal+se), width=0.1,
                 position=position_dodge(0.9))+
   scale_fill_brewer(palette="Paired") + theme_minimal()+
-  xlab("Base survival")
+  xlab("Base survival")+
+  coord_cartesian(ylim = c(0.049, 1))
 
 
 #Dispersal vs Xh
@@ -203,7 +254,8 @@ ggplot(summary_results, aes(x=Xh, y=Dispersal, width=0.5)) +
   geom_errorbar(aes(ymin=Dispersal-se, ymax=Dispersal+se), width=0.1,
                 position=position_dodge(0.9))+
   scale_fill_brewer(palette="Paired") + theme_minimal()+
-  xlab("Cost help survival")
+  xlab("Cost help survival")+
+  coord_cartesian(ylim = c(0.049, 1))
 
 
 
@@ -218,7 +270,8 @@ ggplot(summary_results, aes(x=Xn, y=Dispersal, width=0.5)) +
   geom_errorbar(aes(ymin=Dispersal-se, ymax=Dispersal+se), width=0.1,
                 position=position_dodge(0.9))+
   scale_fill_brewer(palette="Paired") + theme_minimal()+
-  xlab("Benefit group size survival")
+  xlab("Benefit group size survival")+
+  coord_cartesian(ylim = c(0.049, 1))
 
 
 
@@ -233,7 +286,8 @@ ggplot(summary_results, aes(x=K1, y=Dispersal, width=0.5)) +
   geom_errorbar(aes(ymin=Dispersal-se, ymax=Dispersal+se), width=0.1,
                 position=position_dodge(0.9))+
   scale_fill_brewer(palette="Paired") + theme_minimal()+
-  xlab("Benefit help fecundity")
+  xlab("Benefit help fecundity")+
+  coord_cartesian(ylim = c(0.049, 1))
 
 
 
