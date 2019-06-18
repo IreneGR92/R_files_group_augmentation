@@ -1,15 +1,19 @@
 rm(list=ls())
 getwd()
-#setwd('H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\Results')
-setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\Results')
-results<-read.table("ANOVA.csv",header = TRUE, sep=";")
+setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
+#setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
+#setwd('~/Documents/Model/excel_files')
+
+results<-read.table("SEM.csv",header = TRUE, sep=",")
+names(results)[names(results) == '?..Replica'] <- 'Replica'
 
 
 results$X0<-as.factor(results$X0)
 results$Xh<-as.factor(results$Xh)
-results$Xn<-as.factor(results$Xn)
+results$Xn<-as.ordered(results$Xn)
 results$K1<-as.factor(results$K1)
 results$Bias<-as.factor(results$Bias)
+
 
 #head(results)
 str(results)
