@@ -1,9 +1,11 @@
 rm(list=ls())
 getwd()
 #setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
-setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
+#setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
+setwd('~/Documents/Model/excel_files')
+
 results<-read.table("SEM.csv",header = TRUE, sep=",")
-names(results)[names(results) == 'ï..Replica'] <- 'Replica'
+names(results)[names(results) == '?..Replica'] <- 'Replica'
 
 
 results$X0<-as.factor(results$X0)
@@ -14,8 +16,8 @@ results$Bias<-as.factor(results$Bias)
 str(results)
 
 
-sub<-subset(results, Help >1.75)
-View(sub)
+#sub<-subset(results, Help >1.75)
+#View(sub)
 
 
 ######################################### T TEST  #####################################################3
@@ -427,6 +429,17 @@ g7<-ggscatter(results, x = "Relatedness", y = "Help_Disp",
               cor.coeff.args = list(label.x = 0),
               xlab = "Relatedness", ylab = "Help-Dispersal")
 
+g8<-ggscatter(results, x = "Survival", y = "Help", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Survival", ylab = "Help")
+
+g9<-ggscatter(results, x = "Survival", y = "Dispersal", 
+              add = "reg.line", conf.int = TRUE, 
+              cor.coef = TRUE, cor.method = "spearman",
+              xlab = "Survival", ylab = "Dispersal")
 
 
-grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2)
+
+
+grid.arrange(g1, g2, g3, g4, g5, g6, g8, g9, nrow = 3)
