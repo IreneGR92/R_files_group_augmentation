@@ -2,28 +2,32 @@ rm(list=ls())
 
 #DISPERSAL
 
+library(ggplot2)
+library(reshape2)
+
 age<-seq(from=1,by=1, length=15)
 
 dispersal_Formula<-function(beta, betaAge){
   dispersal<-1 / (1 + exp(betaAge*age - beta))
   return(dispersal)}
 
-plot(age,dispersal_Formula(0,0), type="l", col="green", lwd=3, xlab="age", ylab="dispersal", ylim=range(min=0, max=1))
-lines(age,dispersal_Formula(0.25,0.25), type="l", col="blue", lwd=3)
-lines(age,dispersal_Formula(-0.25,0.25), type="l", col="purple", lwd=4)
-lines(age,dispersal_Formula(0.25,-0.25), type="l", col="red", lwd=4)
-lines(age,dispersal_Formula(-0.25,-0.25), type="l", col="orange", lwd=4)
-legend(locator(1),c("Bo= 0, Br= 0",
-                    "Bo= +, Br= +",
-                    "Bo= -, Br= +", 
-                    "Bo= +, Br= -",
-                    "Bo= -, Br= -"), 
-       lwd=c(2,2,2,2,2), col=c("green","blue","purple","red","orange"), y.intersp=1)
-title("Dispersal")
 
+DF.dispersal<-data.frame(age, dispersal_Formula(0,0), dispersal_Formula(0.25,0.25), dispersal_Formula(-0.25,0.25),dispersal_Formula(0.25,-0.25), dispersal_Formula(-0.25,-0.25))
+names(DF.dispersal) <- c("Age","Bo=0,Br=0", "Bo=+,Br=+", "Bo=-,Br=+", "Bo=+,Br=-", "Bo=-,Br=-")
+mdf <- melt(DF.dispersal, id="Age")
+names(mdf)<-c("Age", "Input", "Dispersal.values")
+
+ggplot(mdf, aes(x=Age, y=Dispersal.values,col=Input)) +
+  geom_line(size=1)+
+  xlab("Age")+ ylab("Dispersal")+
+  scale_color_manual(values = c("green","blue", "purple", "red", "orange"))
+  
 
 
 #HELP
+
+library(ggplot2)
+library(reshape2)
 
 age<-seq(from=1,by=1, length=15)
 
@@ -31,16 +35,17 @@ help_Formula<-function(alpha, alphaAge, alphaAge2){
   help<-alpha + alphaAge*age + alphaAge2*age*age
   return(help)}
 
-plot(age, help_Formula(2,0.3,0.03), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=10))
-lines(age,help_Formula(2,0.3,-0.03), type="l", col="blue", lwd=4)
-lines(age,help_Formula(2,-0.3,0.03), type="l", col="green", lwd=4)
-lines(age,help_Formula(2,-0.3,-0.03), type="l", col="purple", lwd=4)
-title("Help")
-legend(locator(1),c("linear= +, quadratic= +",
-                    "linear= +, quadratic= -", 
-                    "linear= -, quadratic= +",
-                    "linear= -, quadratic= -"), 
-       lwd=c(2,2,2,2), col=c("red","blue","green","purple"), y.intersp=1)
+
+DF.help<-data.frame(age, help_Formula(2,0.3,0.03), help_Formula(2,0.3,-0.03), help_Formula(2,-0.3,0.03),help_Formula(2,-0.3,-0.03))
+names(DF.help) <- c("Age","linear=+,quadratic=+", "linear= +,quadratic=-", "linear= -,quadratic=+", "linear=-,quadratic=-")
+mdf <- melt(DF.help, id="Age")
+names(mdf)<-c("Age", "Input", "Help.values")
+
+ggplot(mdf, aes(x=Age, y=Help.values,col=Input)) +
+  geom_line(size=1)+
+  xlab("Age")+ ylab("Help")+
+  scale_color_manual(values = c("green","blue", "purple", "red"))+
+  coord_cartesian(ylim = c(0.049, 10))
 
 
 
@@ -127,6 +132,9 @@ survivalTest
 
 #FECUNDITY
 
+library(ggplot2)
+library(reshape2)
+
 K0<-1
 cumhelp<-c(0:5)
 
@@ -134,6 +142,20 @@ fecundity_Formula <- function(K0,K1) {
   fecundity <- (K0 + cumhelp*K1 / (1 + cumhelp*K1))
   return(fecundity)
 }
+
+DF.fecundity<-data.frame(cumhelp, fecundity_Formula(1,2), fecundity_Formula(1,1), fecundity_Formula(1,0.5))
+names(DF.fecundity) <- c("Cumulative_help","K1=2","K1=1", "K1=0.5")
+mdf <- melt(DF.fecundity, id="Cumulative_help")
+names(mdf)<-c("Cumulative_help", "Input", "Fecundity.values")
+
+ggplot(mdf, aes(x=Cumulative_help, y=Fecundity.values,col=Input)) +
+  geom_line(size=1)+
+  xlab("Cummulative help in group")+ ylab("Fecundity")+
+  scale_color_manual(values = c("green","blue", "red", "orange"))+
+  coord_cartesian(ylim = c(1, 2))
+
+
+
 
 plot(cumhelp,fecundity_Formula(1,2), type="l", col="red", lwd=3, xlab="cumhelp", ylab="fecundity")
 lines(cumhelp, fecundity_Formula(1,1), type="l", col="blue", lwd=3)
