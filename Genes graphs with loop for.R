@@ -13,9 +13,9 @@ library(dplyr)
 library(ggpubr)
 
 #directory<-"~/Documents/Model/Results/" #Linux
-#directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\15.04.19\\NRN\\"  #Work
+directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\16.06.19\\NRN\\"  #Work 
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\Default\\"  #Home
+#directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\Default\\"  #Home
 
 getwd()
 
@@ -128,25 +128,25 @@ SDcorr_Help_Disp<-do_SD_LG(GA$corr_Help_Disp, gen_with_help)
 SD_PropFloatBreeder<-do_SD_LG(GA$propFloatBreeder, gen_with_help)
 
 #For the las generation before the evolution of help
-meanBetaNH<-do_mean_LG(GA$meanBeta, gen_without_help)
-meanBetaAgeNH<-do_mean_LG(GA$meanBetaAge, gen_without_help)
-meanAgeNH<-do_mean_LG(GA$Age, gen_without_help)
-meanGroupSizeNH<-do_mean_LG(GA$Group_size, gen_without_help)
-meanHelpNH<-do_mean_LG(GA$meanHelp, gen_without_help)
-meanDispersalNH<-do_mean_LG(GA$meanDispersal, gen_without_help)
-meanSurvivalNH<-do_mean_LG(GA$meanSurvival, gen_without_help)
-meanRelatednessNH<-do_mean_LG(GA$Relatedness, gen_without_help)
-meanPropFloatBreederNH<-do_mean_LG(GA$propFloatBreeder, gen_without_help)
-
-SD_BetaNH<-do_SD_LG(GA$meanBeta, gen_without_help)
-SD_BetaAgeNH<-do_SD_LG(GA$meanBetaAge, gen_without_help)
-SD_AgeNH<-do_SD_LG(GA$Age, gen_without_help)
-SD_GroupSizeNH<-do_SD_LG(GA$Group_size, gen_without_help)
-SD_HelpNH<-do_SD_LG(GA$meanHelp, gen_without_help)
-SD_DispersalNH<-do_SD_LG(GA$meanDispersal, gen_without_help)
-SD_SurvivalNH<-do_SD_LG(GA$meanSurvival, gen_without_help)
-SD_RelatednessNH<-do_SD_LG(GA$Relatedness, gen_without_help)
-SD_PropFloatBreederNH<-do_SD_LG(GA$propFloatBreeder, gen_without_help)
+# meanBetaNH<-do_mean_LG(GA$meanBeta, gen_without_help)
+# meanBetaAgeNH<-do_mean_LG(GA$meanBetaAge, gen_without_help)
+# meanAgeNH<-do_mean_LG(GA$Age, gen_without_help)
+# meanGroupSizeNH<-do_mean_LG(GA$Group_size, gen_without_help)
+# meanHelpNH<-do_mean_LG(GA$meanHelp, gen_without_help)
+# meanDispersalNH<-do_mean_LG(GA$meanDispersal, gen_without_help)
+# meanSurvivalNH<-do_mean_LG(GA$meanSurvival, gen_without_help)
+# meanRelatednessNH<-do_mean_LG(GA$Relatedness, gen_without_help)
+# meanPropFloatBreederNH<-do_mean_LG(GA$propFloatBreeder, gen_without_help)
+# 
+# SD_BetaNH<-do_SD_LG(GA$meanBeta, gen_without_help)
+# SD_BetaAgeNH<-do_SD_LG(GA$meanBetaAge, gen_without_help)
+# SD_AgeNH<-do_SD_LG(GA$Age, gen_without_help)
+# SD_GroupSizeNH<-do_SD_LG(GA$Group_size, gen_without_help)
+# SD_HelpNH<-do_SD_LG(GA$meanHelp, gen_without_help)
+# SD_DispersalNH<-do_SD_LG(GA$meanDispersal, gen_without_help)
+# SD_SurvivalNH<-do_SD_LG(GA$meanSurvival, gen_without_help)
+# SD_RelatednessNH<-do_SD_LG(GA$Relatedness, gen_without_help)
+# SD_PropFloatBreederNH<-do_SD_LG(GA$propFloatBreeder, gen_without_help)
 
 #For each replica
 meanAlphaR<-GA$meanAlpha[GA$Generation==100000]
@@ -181,15 +181,15 @@ descriptives <- data.frame(Variable=c("alpha", "alphaAge", "alphaAge2",
                                 SD_Age, SD_GroupSize,
                                 SDcorr_Help_Disp, SD_PropFloatBreeder))
 
-descriptivesNH <- data.frame(Variable=c("beta", "betaAge", 
-                                      "Help","Dispersal", "Survival", "Relatedness",
-                                      "age", "Group_size","propFloaterB"),
-                           Mean=c(meanBetaNH, meanBetaAgeNH, 
-                                  meanHelpNH,meanDispersalNH,meanSurvivalNH,meanRelatednessNH,
-                                  meanAgeNH,meanGroupSizeNH,meanPropFloatBreederNH),
-                           SD=c(SD_BetaNH,SD_BetaAgeNH,
-                                SD_HelpNH,SD_DispersalNH,SD_SurvivalNH,SD_RelatednessNH,
-                                SD_AgeNH, SD_GroupSizeNH,SD_PropFloatBreederNH))
+# descriptivesNH <- data.frame(Variable=c("beta", "betaAge", 
+#                                       "Help","Dispersal", "Survival", "Relatedness",
+#                                       "age", "Group_size","propFloaterB"),
+#                            Mean=c(meanBetaNH, meanBetaAgeNH, 
+#                                   meanHelpNH,meanDispersalNH,meanSurvivalNH,meanRelatednessNH,
+#                                   meanAgeNH,meanGroupSizeNH,meanPropFloatBreederNH),
+#                            SD=c(SD_BetaNH,SD_BetaAgeNH,
+#                                 SD_HelpNH,SD_DispersalNH,SD_SurvivalNH,SD_RelatednessNH,
+#                                 SD_AgeNH, SD_GroupSizeNH,SD_PropFloatBreederNH))
 
 
 
@@ -210,7 +210,7 @@ descriptivesR <- data.frame( ID=c(nameFile),
 
 
 write.xlsx(descriptives, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Results", append = FALSE)# append TRUE to create a new sheet in the same file
-write.xlsx(descriptivesNH, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Result before help", append = TRUE)
+#write.xlsx(descriptivesNH, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Result before help", append = TRUE)
 write.xlsx(descriptivesR, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Result per replica", append = TRUE)
 write.xlsx(Parameters, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Parameters", append = TRUE)
 
@@ -273,8 +273,8 @@ p1<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanHelp)) +
   geom_ribbon(aes(ymin=GA_means$meanHelp-GA_SD$meanHelp, ymax=GA_means$meanHelp+GA_SD$meanHelp),
               alpha=0.3) +
   geom_line(color="red", size=1)+
-  xlab("Generation")+ ylab("Help")+
-  coord_cartesian(ylim = c(0.049, 1))
+  xlab("Generation")+ ylab("Help")
+  #+coord_cartesian(ylim = c(0.049, 1))
 
 
 ##Dispersal plot
@@ -333,32 +333,30 @@ grid.arrange(p1, p2, p6, p4, p5, p3, nrow = 3)
 
 ########### REACTION NORMS ####################
 
-# grid<-matrix(c(1,2),nrow=1,ncol=2)
-# layout(grid)
-par(mfrow = c(3, 2))
-age<-seq(from=1,by=1, length=11)
-
-# HELP
-if(Parameters[1,2]==1){
-replace_with_zero_if_below_zero <- function(x) {
-  x <- ifelse(x<0,0,x)
-  return(x)
-}
-
-help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
-  help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
-  help<-ifelse(help<0,0,help)
-  return(help)}
-
-helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
-}
-
-# DISPERSAL
-
-if(Parameters[2,2]==1){
-dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
-dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
-}
+# par(mfrow = c(3, 2))
+# age<-seq(from=1,by=1, length=11)
+# 
+# # HELP
+# if(Parameters[1,2]==1){
+# replace_with_zero_if_below_zero <- function(x) {
+#   x <- ifelse(x<0,0,x)
+#   return(x)
+# }
+# 
+# help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
+#   help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
+#   help<-ifelse(help<0,0,help)
+#   return(help)}
+# 
+# helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
+# }
+# 
+# # DISPERSAL
+# 
+# if(Parameters[2,2]==1){
+# dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
+# dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
+# }
 
 
 

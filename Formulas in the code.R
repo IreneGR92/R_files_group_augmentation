@@ -76,7 +76,7 @@ levelplot(help~x*y,data=gridxy, xlab="Help", ylab="Group size", main="Survival")
 
 
 ##Alternative survival
-m<-0.7
+X0<-0.7
 Xsh<-0.4
 Xsn<-0.4
 
@@ -87,7 +87,7 @@ survival<-function(parameters,x,y){
 
 rangx<-seq(from=0,by=0.1, length=11)
 rangy<-c(1:11)
-param<-c(m,Xsh,Xsn)
+param<-c(X0,Xsh,Xsn)
 gridxy<-expand.grid(rangx,rangy)
 names(gridxy)<-c('x',"y")
 
@@ -96,36 +96,23 @@ gridxy$help<-survival(param,gridxy$x,gridxy$y)
 levelplot(help~x*y,data=gridxy, xlab="Help", ylab="Group size", main="Survival")
 
 
-##Alternative survival mixed both
-m<-0.9
-Xsh<-1
-Xsn<-1
 
-survival<-function(parameters,x,y){
-  survival_Formula<-parameters[1]- (parameters[1]/(1 + exp(parameters[2]- parameters[3]))-
-    parameters[1]/(1 + exp(parameters[2] /(1 + exp(-x)) - parameters[3] / (1 + exp(-(y+1))))))
-  
-  return(survival_Formula)
+#Value of help from which no effect on survival
+
+help=seq(from=0,by=0.5, length=16)
+
+survivalHelp<-function(Xh,help){
+  survival_Formula<-(Xh/(1 + exp(-help)))
 }
 
-rangx<-seq(from=0,by=0.15, length=16)
-rangy<-c(0:15)
-param<-c(m,Xsh,Xsn)
-gridxy<-expand.grid(rangx,rangy)
-names(gridxy)<-c('x',"y")
+DF.help<-data.frame(help, survivalHelp(0.4,help), survivalHelp(0.2,help))
+names(DF.help) <- c("Help","Survival_Xh=0.4", "Survival_Xh=0.2")
+mdf <- melt(DF.help, id="Help")
+names(mdf)<-c("Help", "Label", "Survival")
 
-gridxy$help<-survival(param,gridxy$x,gridxy$y)
-
-levelplot(help~x*y,data=gridxy, xlab="Help", ylab="Group size", main="Survival")
-
-help<-seq(from=0,by=0.1, length=20)
-groupsize<-seq(from=0,by=1, length=15)
-Xsh /(1 + exp(-help))
-Xsn / (1 + exp(-(groupsize)))
-survival(param,gridxy$x,gridxy$y)
-
-survivalTest<-m-((m/(1 + exp(Xsh-Xsn)))- m/(1 + exp(Xsh /(1 + exp(-2)) - Xsn / (1 + exp(-(10+1))))))
-survivalTest
+ggplot(mdf, aes(x=Help, y=Survival,col=Label)) +
+  geom_line(size=1)+
+  scale_color_manual(values = c("green","purple"))
 
 
 
@@ -136,14 +123,14 @@ library(ggplot2)
 library(reshape2)
 
 K0<-1
-cumhelp<-c(0:5)
+cumhelp<-c(0:10)
 
 fecundity_Formula <- function(K0,K1) {
   fecundity <- (K0 + cumhelp*K1 / (1 + cumhelp*K1))
   return(fecundity)
 }
 
-DF.fecundity<-data.frame(cumhelp, fecundity_Formula(1,2), fecundity_Formula(1,1), fecundity_Formula(1,0.5))
+DF.fecundity<-data.frame(cumhelp, fecundity_Formula(K0,2), fecundity_Formula(K0,1), fecundity_Formula(K0,0.5))
 names(DF.fecundity) <- c("Cumulative_help","K1=2","K1=1", "K1=0.5")
 mdf <- melt(DF.fecundity, id="Cumulative_help")
 names(mdf)<-c("Cumulative_help", "Input", "Fecundity.values")
@@ -155,13 +142,6 @@ ggplot(mdf, aes(x=Cumulative_help, y=Fecundity.values,col=Input)) +
   coord_cartesian(ylim = c(1, 2))
 
 
-
-
-plot(cumhelp,fecundity_Formula(1,2), type="l", col="red", lwd=3, xlab="cumhelp", ylab="fecundity")
-lines(cumhelp, fecundity_Formula(1,1), type="l", col="blue", lwd=3)
-lines(cumhelp, fecundity_Formula(1,0.5), type="l", col="green", lwd=3)
-title("Fecundity: Type II functional response")
-legend(locator(1),c("K1=2","K1=1", "K1=0.5"), lwd=c(2,2,2), col=c("red","blue","green"), y.intersp=1)
 
 
 
