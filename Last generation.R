@@ -1,11 +1,23 @@
 rm(list=ls())
+
+library(ggplot2)
+library(gtable)
+library(grid)
+library(gridExtra)
+library(formattable)
+#Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_201')
+library(rJava)
+library(xlsx)
 library(data.table)
-getwd()
-setwd('H:\\PhD\\CODE\\All_results\\txt_files\\last_generation')
-#setwd('H:\\PhD\\CODE\\Group_augmentation_Cplusplus\\Group_augmentation_RN\\Group_augmentation_RN')
-#setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\last_generation')
-#setwd('C:\\Users\\igaru\\Documents\\GitHub\\Group_augmentation_Cplusplus\\Group_augmentation_RN\\Group_augmentation_RN')
-GA2<-read.table("group_augmentation_last_generation_.txt",header = TRUE, skip=27)
+library(dplyr)
+library(tidyselect)
+library(ggpubr)
+
+#directory<-"~/Documents/Model/Results/" #Linux
+#directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\16.06.19\\NRN\\"  #Work 
+#directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
+setwd("C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\NRN\\last_generation")  #Home
+GA2<-read.table("group_augmentation_last_generation_X05-Xh02-Xn04.txt",header = TRUE, skip=30)
 GA2 <- subset(GA2, age>0)
 setDF(GA2)
 

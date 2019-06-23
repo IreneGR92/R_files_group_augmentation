@@ -16,7 +16,7 @@ library(ggpubr)
 #directory<-"~/Documents/Model/Results/" #Linux
 #directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\16.06.19\\NRN\\"  #Work 
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\No_relatedness\\"  #Home
+directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\RN\\"  #Home
 
 getwd()
 
@@ -62,8 +62,18 @@ proportions_floaters_breeder<-function(){
 
 GA$propFloatBreeder <- proportions_floaters_breeder()
 
-if(GA$meanDispersal==-1)GA[GA$meanDispersal==-1,]$meanDispersal<-NaN
-if(GA$meanSurvival==-1)GA[GA$meanSurvival==-1,]$meanSurvival<-NaN
+
+GA$meanDispersal <- as.character(GA$meanDispersal)
+GA$meanDispersal[GA$meanDispersal == "-1"] <- "NaN"
+GA$meanDispersal <- as.factor(GA$meanDispersal)
+
+GA$meanSurvival <- as.character(GA$meanSurvival)
+GA$meanSurvival[GA$meanSurvival == "-1"] <- "NaN"
+GA$meanSurvival <- as.factor(GA$meanSurvival)
+
+#apply(GA, 2, function(meanHelp) ifelse(meanHelp > 4, 4, meanHelp))
+
+
 
 
 ##Means between replicas
@@ -334,30 +344,30 @@ grid.arrange(p1, p2, p6, p4, p5, p3, nrow = 3)
 
 ########### REACTION NORMS ####################
 
-# par(mfrow = c(3, 2))
-# age<-seq(from=1,by=1, length=11)
-# 
-# # HELP
-# if(Parameters[1,2]==1){
-# replace_with_zero_if_below_zero <- function(x) {
-#   x <- ifelse(x<0,0,x)
-#   return(x)
-# }
-# 
-# help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
-#   help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
-#   help<-ifelse(help<0,0,help)
-#   return(help)}
-# 
-# helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
-# }
-# 
-# # DISPERSAL
-# 
-# if(Parameters[2,2]==1){
-# dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
-# dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
-# }
+par(mfrow = c(3, 2))
+age<-seq(from=1,by=1, length=11)
+
+# HELP
+if(Parameters[1,2]==1){
+replace_with_zero_if_below_zero <- function(x) {
+  x <- ifelse(x<0,0,x)
+  return(x)
+}
+
+help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
+  help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
+  help<-ifelse(help<0,0,help)
+  return(help)}
+
+helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
+}
+
+# DISPERSAL
+
+if(Parameters[2,2]==1){
+dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
+dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
+}
 
 
 
