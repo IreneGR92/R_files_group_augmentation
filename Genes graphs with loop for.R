@@ -12,6 +12,7 @@ library(data.table)
 library(dplyr)
 library(tidyselect)
 library(ggpubr)
+library(magrittr)
 
 #directory<-"~/Documents/Model/Results/" #Linux
 #directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\16.06.19\\NRN\\"  #Work 
@@ -36,18 +37,14 @@ nameFile<-substring(nameFile, 20)
 
 
 setwd(paste(directory, "main",sep=""))
-Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=30)
+Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=29)
 Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
 GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=31)
 
-#GA<-read.table("group_augmentation_bias10.txt")
 
 #Last generation
 setwd(paste(directory, "last_generation",sep=""))
 GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=31) 
-
-#GA2<-read.table("group_augmentation_last_generation_bias10.txt")
-
 GA2 <- subset(GA2, age>0)
 setDF(GA2)
 
@@ -76,8 +73,8 @@ GA$meanSurvival <- as.character(GA$meanSurvival)
 GA$meanSurvival[GA$meanSurvival == "-1"] <- NA
 GA$meanSurvival <- as.numeric(GA$meanSurvival)
 
-#apply(GA, 2, function(meanHelp) ifelse(meanHelp > 4, 4, meanHelp))
 
+#apply(GA, 2, function(meanHelp) ifelse(meanHelp > 4, 4, meanHelp))
 
 
 
@@ -349,66 +346,66 @@ grid.arrange(p1, p2, p6, p4, p5, p3, nrow = 3)
 
 ########### REACTION NORMS ####################
 
-par(mfrow = c(3, 2))
-age<-seq(from=1,by=1, length=11)
-
-# HELP
-if(Parameters[1,2]==1){
-replace_with_zero_if_below_zero <- function(x) {
-  x <- ifelse(x<0,0,x)
-  return(x)
-}
-
-help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
-  help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
-  help<-ifelse(help<0,0,help)
-  return(help)}
-
-helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
-}
-
-# DISPERSAL
-
-if(Parameters[2,2]==1){
-dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
-dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
-}
+# par(mfrow = c(3, 2))
+# age<-seq(from=1,by=1, length=11)
+# 
+# # HELP
+# if(Parameters[1,2]==1){
+# replace_with_zero_if_below_zero <- function(x) {
+#   x <- ifelse(x<0,0,x)
+#   return(x)
+# }
+# 
+# help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
+#   help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
+#   help<-ifelse(help<0,0,help)
+#   return(help)}
+# 
+# helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
+# }
+# 
+# # DISPERSAL
+# 
+# if(Parameters[2,2]==1){
+# dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
+# dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
+# }
 
 
 
 ########## LAST GENRATION ##########
 
-GA2$age_f<-as.factor(GA2$age)
-GA2<-na.omit(GA2)
-
-
-helpBoxP<-ggboxplot(GA2, x = "age_f", y = "Help", 
-          add = "jitter", add.params = list(color = "grey", alpha=0.2),#instead of grey you can put a factor
-          color = "black",
-          xlab = "Age", ylab = "Help", title =  "Level of help by age",ylim=c(0.1,2),
-          palette = "aaas")
-
-
-dispersalBoxP<-ggboxplot(GA2, x = "age_f", y = "dispersal", 
-          add = "jitter", add.params = list(color = "grey", alpha=0.2),#instead of grey you can put a factor
-          color = "black",
-          xlab = "Age", ylab = "Dispersal", title =  "Level of dispersal by age",ylim=c(0,1),
-          palette = "aaas")
-
-grid.arrange(helpBoxP, dispersalBoxP, nrow = 2, ncol=2)
-
-j=1
-relatedness_values<-GA$Relatedness[GA$Generation==100000]
-while(j<21){
-    GA2$Relatedness[GA2$replica == j] <- relatedness_values[j]
-  j<-j+1
-}
-
-plot(GA2$Help, GA2$dispersal, col=GA2$replica,  xlab="Help", ylab="Dispersal")
-title("Dispersal vs Help")
-
-plot(GA2$Help, GA2$Relatedness, col=GA2$replica,  xlab="Help", ylab="Relatedness")
-title("Relatedness vs Help")
+# GA2$age_f<-as.factor(GA2$age)
+# GA2<-na.omit(GA2)
+# 
+# 
+# helpBoxP<-ggboxplot(GA2, x = "age_f", y = "Help", 
+#           add = "jitter", add.params = list(color = "grey", alpha=0.2),#instead of grey you can put a factor
+#           color = "black",
+#           xlab = "Age", ylab = "Help", title =  "Level of help by age",ylim=c(0.1,2),
+#           palette = "aaas")
+# 
+# 
+# dispersalBoxP<-ggboxplot(GA2, x = "age_f", y = "dispersal", 
+#           add = "jitter", add.params = list(color = "grey", alpha=0.2),#instead of grey you can put a factor
+#           color = "black",
+#           xlab = "Age", ylab = "Dispersal", title =  "Level of dispersal by age",ylim=c(0,1),
+#           palette = "aaas")
+# 
+# grid.arrange(helpBoxP, dispersalBoxP, nrow = 2, ncol=2)
+# 
+# j=1
+# relatedness_values<-GA$Relatedness[GA$Generation==100000]
+# while(j<21){
+#     GA2$Relatedness[GA2$replica == j] <- relatedness_values[j]
+#   j<-j+1
+# }
+# 
+# plot(GA2$Help, GA2$dispersal, col=GA2$replica,  xlab="Help", ylab="Dispersal")
+# title("Dispersal vs Help")
+# 
+# plot(GA2$Help, GA2$Relatedness, col=GA2$replica,  xlab="Help", ylab="Relatedness")
+# title("Relatedness vs Help")
 
 #plot(GA2$Help, GA2$Dispersal, col=c("blue","green")[GA2$AgeDic],  xlab="Help", ylab="Dispersal")
 #legend(x="bottomright", legend = levels(GA2$AgeDic), col=c("blue","green"), pch=1)
