@@ -10,12 +10,13 @@ library(rJava)
 library(xlsx)
 library(data.table)
 library(dplyr)
+library(tidyselect)
 library(ggpubr)
 
 #directory<-"~/Documents/Model/Results/" #Linux
-directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\16.06.19\\NRN\\"  #Work 
+#directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\16.06.19\\NRN\\"  #Work 
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
-#directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\Default\\"  #Home
+directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\No_relatedness\\"  #Home
 
 getwd()
 

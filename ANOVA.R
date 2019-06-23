@@ -1,11 +1,11 @@
 rm(list=ls())
 getwd()
-setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
-#setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
+#setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
+setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
 #setwd('~/Documents/Model/excel_files')
 
 results<-read.table("SEM.csv",header = TRUE, sep=",")
-names(results)[names(results) == '?..Replica'] <- 'Replica'
+names(results)[names(results) == 'ï..Replica'] <- 'Replica'
 
 
 results$X0<-as.factor(results$X0)
