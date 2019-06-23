@@ -36,13 +36,18 @@ nameFile<-substring(nameFile, 20)
 
 
 setwd(paste(directory, "main",sep=""))
-Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=29)
+Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=30)
 Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
-GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=30)
+GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=31)
+
+#GA<-read.table("group_augmentation_bias10.txt")
 
 #Last generation
 setwd(paste(directory, "last_generation",sep=""))
-GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=30) 
+GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=31) 
+
+#GA2<-read.table("group_augmentation_last_generation_bias10.txt")
+
 GA2 <- subset(GA2, age>0)
 setDF(GA2)
 
@@ -64,12 +69,12 @@ GA$propFloatBreeder <- proportions_floaters_breeder()
 
 
 GA$meanDispersal <- as.character(GA$meanDispersal)
-GA$meanDispersal[GA$meanDispersal == "-1"] <- "NaN"
-GA$meanDispersal <- as.factor(GA$meanDispersal)
+GA$meanDispersal[GA$meanDispersal == "-1"] <- NA
+GA$meanDispersal <- as.numeric(GA$meanDispersal)
 
 GA$meanSurvival <- as.character(GA$meanSurvival)
-GA$meanSurvival[GA$meanSurvival == "-1"] <- "NaN"
-GA$meanSurvival <- as.factor(GA$meanSurvival)
+GA$meanSurvival[GA$meanSurvival == "-1"] <- NA
+GA$meanSurvival <- as.numeric(GA$meanSurvival)
 
 #apply(GA, 2, function(meanHelp) ifelse(meanHelp > 4, 4, meanHelp))
 
@@ -79,11 +84,11 @@ GA$meanSurvival <- as.factor(GA$meanSurvival)
 ##Means between replicas
 
 do_mean<-function(x){
-  x<-aggregate(x, list(GA$Generation), mean) 
+  x<-aggregate(x, list(GA$Generation), mean, na.rm=TRUE) 
   return(x)
 }
 do_sd<-function(x){
-  x<-aggregate(x, list(GA$Generation), sd) 
+  x<-aggregate(x, list(GA$Generation), sd, na.rm=TRUE) 
   return(x)
 }
 
@@ -97,12 +102,12 @@ GA_SD<-do_sd(GA)
 ##Means and SD of the means of the variables between the different replicas
 
 do_mean_LG<-function(x,y){
-  x<-round(mean(x[GA$Generation==y]), digits = 4)
+  x<-round(mean(x[GA$Generation==y], na.rm=TRUE), digits = 4)
   return(x)
 }
 
 do_SD_LG<-function(x,y){
-  x<-round(sd(x[GA$Generation==y]), digits = 4)
+  x<-round(sd(x[GA$Generation==y], na.rm=TRUE), digits = 4)
   return(x)
 }
 
