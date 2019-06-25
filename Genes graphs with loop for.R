@@ -286,8 +286,8 @@ p1<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanHelp)) +
   geom_ribbon(aes(ymin=GA_means$meanHelp-GA_SD$meanHelp, ymax=GA_means$meanHelp+GA_SD$meanHelp),
               alpha=0.3) +
   geom_line(color="red", size=1)+
-  xlab("Generation")+ ylab("Help")
-  #+coord_cartesian(ylim = c(0.049, 1))
+  xlab("Generation")+ ylab("Help") +
+  coord_cartesian(ylim = c(0.049, 1))
 
 
 ##Dispersal plot
@@ -316,11 +316,12 @@ p4<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Relatedness)) +
 
 
 ##Population stability?
-p5<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Group_size)) +
-  geom_ribbon(aes(ymin=GA_means$Group_size-GA_SD$Group_size, ymax=GA_means$Group_size+GA_SD$Group_size),
+p5<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Num_helpers)) +
+  geom_ribbon(aes(ymin=GA_means$Num_helpers-GA_SD$Num_helpers, ymax=GA_means$Num_helpers+GA_SD$Num_helpers),
               alpha=0.3) +
   geom_line(color="purple", size=1)+
-  xlab("Generation")+ ylab("Group size")
+  xlab("Generation")+ ylab("Number of helpers")+
+  coord_cartesian(ylim = c(0.049, 5))
 
 
 ##Cummulative help in fecundity
