@@ -14,10 +14,10 @@ library(tidyselect)
 library(ggpubr)
 library(magrittr)
 
-#directory<-"~/Documents/Model/Results/" #Linux
+directory<-"~/Documents/Model/Results/NRN/" #Linux
 #directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\16.06.19\\NRN\\"  #Work 
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\RN\\"  #Home
+#directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\RN\\"  #Home
 
 getwd()
 
