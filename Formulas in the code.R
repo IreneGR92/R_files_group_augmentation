@@ -22,6 +22,7 @@ ggplot(mdf, aes(x=Age, y=Dispersal.values,col=Input)) +
   geom_line(size=1)+
   xlab("Age")+ ylab("Dispersal")+
   scale_color_manual(values = c("green","blue", "purple", "red", "orange"))+
+  dark_theme_gray()
   
 
 #HELP
