@@ -121,6 +121,7 @@ meanAge<-do_mean_LG(GA$Age, gen_with_help)
 meanGroupSize<-do_mean_LG(GA$Group_size, gen_with_help)
 meanNumHelpers<-do_mean_LG(GA$Num_helpers, gen_with_help)
 meanHelp<-do_mean_LG(GA$meanHelp, gen_with_help)
+meanCumHelp<-do_mean_LG(GA$meanCumHelp, gen_with_help)
 meanDispersal<-do_mean_LG(GA$meanDispersal, gen_with_help)
 meanSurvival<-do_mean_LG(GA$meanSurvival, gen_with_help)
 meanRelatedness<-do_mean_LG(GA$Relatedness, gen_with_help)
@@ -136,6 +137,7 @@ SD_Age<-do_SD_LG(GA$Age, gen_with_help)
 SD_GroupSize<-do_SD_LG(GA$Group_size, gen_with_help)
 SD_NumHelpers<-do_SD_LG(GA$Num_helpers, gen_with_help)
 SD_Help<-do_SD_LG(GA$meanHelp, gen_with_help)
+SD_CumHelp<-do_SD_LG(GA$meanCumHelp, gen_with_help)
 SD_Dispersal<-do_SD_LG(GA$meanDispersal, gen_with_help)
 SD_Survival<-do_SD_LG(GA$meanSurvival, gen_with_help)
 SD_Relatedness<-do_SD_LG(GA$Relatedness, gen_with_help)
@@ -173,6 +175,7 @@ meanAgeR<-GA$Age[GA$Generation==100000]
 meanGroupSizeR<-GA$Group_size[GA$Generation==100000]
 meanNumHelpersR<-GA$Num_helpers[GA$Generation==100000]
 meanHelpR<-GA$meanHelp[GA$Generation==100000]
+meanCumHelpR<-GA$meanCumHelp[GA$Generation==100000]
 meanDispersalR<-GA$meanDispersal[GA$Generation==100000]
 meanSurvivalR<-GA$meanSurvival[GA$Generation==100000]
 meanRelatednessR<-GA$Relatedness[GA$Generation==100000]
@@ -187,6 +190,7 @@ descriptivesR <- data.frame( ID=c(nameFile),
                              K1=c(Parameters[15,2]),
                              Bias=c(Parameters[10,2]),
                              Help=c(meanHelpR),
+                             CumHelp=c(meanCumHelpR),
                              Dispersal=c(meanDispersalR),
                              Survival=c(meanSurvivalR),
                              Relatedness=c(meanRelatednessR),
@@ -199,17 +203,17 @@ descriptivesR <- data.frame( ID=c(nameFile),
 
 descriptives <- data.frame(Variable=c("alpha", "alphaAge", "alphaAge2",
                                       "beta", "betaAge", 
-                                      "Help","Dispersal", "Survival", "Relatedness",
+                                      "Help","CumHelp", "Dispersal", "Survival", "Relatedness",
                                       "age", "Group_size","Num_helpers",
                                       "Help_Disp", "propFloaterB"),
                            Mean=c(meanAlpha, meanAlphaAge, meanAlphaAge2,
                                   meanBeta, meanBetaAge, 
-                                  meanHelp,meanDispersal,meanSurvival,meanRelatedness,
+                                  meanHelp,meanCumHelp, meanDispersal,meanSurvival,meanRelatedness,
                                   meanAge,meanGroupSize,meanNumHelpers,
                                   meanCorr_Help_Disp, meanPropFloatBreeder),
                            SD=c(SD_Alpha,SD_AlphaAge,SD_AlphaAge2,
                                 SD_Beta,SD_BetaAge,
-                                SD_Help,SD_Dispersal,SD_Survival,SD_Relatedness,
+                                SD_Help,SD_CumHelp, SD_Dispersal,SD_Survival,SD_Relatedness,
                                 SD_Age, SD_GroupSize,SD_NumHelpers,
                                 SDcorr_Help_Disp, SD_PropFloatBreeder))
 
