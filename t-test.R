@@ -4,7 +4,7 @@ getwd()
 setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
 #setwd('~/Documents/Model/excel_files')
 
-results<-read.table("SEM-NRN.csv",header = TRUE, sep=",")
+results<-read.table("SEM-RN.csv",header = TRUE, sep=",")
 names(results)[names(results) == 'ï..Replica'] <- 'Replica'
 
 
@@ -60,32 +60,21 @@ ggplot(help_summary, aes(x=Bias, y=Help, width=0.5)) +
   geom_bar(stat="identity", position=position_dodge(), fill="red")+
   geom_errorbar(aes(ymin=Help-se, ymax=Help+se), width=0.1,
                 position=position_dodge(0.9))+
-  scale_fill_brewer(palette="Paired") + theme_minimal()
+  scale_fill_brewer(palette="Paired") + theme_minimal()+
+  dark_theme_gray(base_size = 14)
 
 
-
-
-help_summary<-data_summary(resultsH, varname="Group_size", groupnames=c("Bias"))
+help_summary<-data_summary(resultsH, varname="Num_helpers", groupnames=c("Bias")) 
 help_summary$se<-SE_formula(help_summary$sd,10)
 
-ggplot(help_summary, aes(x=Bias, y=Group_size, width=0.5)) +
-  geom_bar(stat="identity", position=position_dodge())+
-  geom_errorbar(aes(ymin=Group_size-se, ymax=Group_size+se), width=0.1,
+ggplot(help_summary, aes(x=Bias, y=Num_helpers, width=0.5)) + 
+  geom_bar(stat="identity", position=position_dodge()) +
+  geom_errorbar(aes(ymin=Num_helpers-se, ymax=Num_helpers+se), width=0.1,
                 position=position_dodge(0.9))+
   scale_fill_brewer(palette="Paired") + theme_minimal()+
-  ylab("Group size")
-
-
-help_summary<-data_summary(resultsH, varname="Survival", groupnames=c("Bias"))
-help_summary$se<-SE_formula(help_summary$sd,10)
-
-ggplot(help_summary, aes(x=Bias, y=Survival, width=0.5)) +
-  geom_bar(stat="identity", position=position_dodge())+
-  geom_errorbar(aes(ymin=Survival-se, ymax=Survival+se), width=0.1,
-                position=position_dodge(0.9))+
-  scale_fill_brewer(palette="Paired") + theme_minimal()+
-  coord_cartesian(ylim = c(0.049, 1))
-
+  xlab("Bias")+
+  ylab("Number of helpers")+
+  dark_theme_gray(base_size = 14)
 
 
 
@@ -129,7 +118,7 @@ ggplot(help_summary, aes(x=Xn, y=Help, width=0.5)) +
                 position=position_dodge(0.9))+
   scale_fill_brewer(palette="Paired") + theme_minimal()+
   xlab("Benefit group size survival")+
-  dark_theme_gray()
+  dark_theme_gray(base_size = 14)
 
 
 
@@ -142,21 +131,8 @@ ggplot(help_summary, aes(x=Xn, y=Num_helpers, width=0.5)) +
                 position=position_dodge(0.9))+
   scale_fill_brewer(palette="Paired") + theme_minimal()+
   xlab("Benefit group size survival")+
-  ylab("Number of helpers")
-
-
-
-help_summary<-data_summary(resultsH, varname="Survival", groupnames=c("Xn")) 
-help_summary$se<-SE_formula(help_summary$sd,10)
-
-ggplot(help_summary, aes(x=Xn, y=Survival, width=0.5)) + 
-  geom_bar(stat="identity", position=position_dodge()) +
-  geom_errorbar(aes(ymin=Survival-se, ymax=Survival+se), width=0.1,
-                position=position_dodge(0.9))+
-  scale_fill_brewer(palette="Paired") + theme_minimal()+
-  xlab("Benefit group size survival")
-
-
+  ylab("Number of helpers")+
+  dark_theme_gray(base_size = 14)
 
 
 
@@ -222,7 +198,7 @@ ggplot(summary_results, aes(x=Xh, y=Dispersal, width=0.5)) +
   scale_fill_brewer(palette="Paired") + theme_minimal()+
   xlab("Cost help survival")+
   coord_cartesian(ylim = c(0.049, 1))+
-  dark_theme_gray()
+  dark_theme_gray(base_size = 14)
 
 
 
@@ -256,7 +232,7 @@ ggplot(summary_results, aes(x=K1, y=Dispersal, width=0.5)) +
   scale_fill_brewer(palette="Paired") + theme_minimal()+
   xlab("Benefit help fecundity")+
   coord_cartesian(ylim = c(0.049, 1))+
-  dark_theme_gray()
+  dark_theme_gray(base_size = 14)
 
 
 

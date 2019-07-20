@@ -17,7 +17,7 @@ library(magrittr)
 #directory<-"~/Documents/Model/Results/NRN/" #Linux
 #directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\16.06.19\\NRN\\"  #Work 
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\No_relatedness\\"  #Home
+directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\test\\"  #Home
 
 getwd()
 
@@ -293,8 +293,9 @@ p1<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanHelp)) +
   geom_ribbon(aes(ymin=GA_means$meanHelp-GA_SD$meanHelp, ymax=GA_means$meanHelp+GA_SD$meanHelp),
               alpha=0.3) +
   geom_line(color="red", size=1)+
-  xlab("Generation")+ ylab("Help") 
-  #coord_cartesian(ylim = c(0.049, 1))
+  xlab("Generation")+ ylab("Help") +
+  dark_theme_gray(base_size = 14)+
+  coord_cartesian(ylim = c(0.049, 0.75))
 
 
 ##Dispersal plot
@@ -303,15 +304,17 @@ p2<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanDispersal)) +
               alpha=0.3) +
   geom_line(color="blue", size=1)+
   xlab("Generation")+ ylab("Dispersal")+
-  coord_cartesian(ylim = c(0.049, 1))
+  coord_cartesian(ylim = c(0.049, 1))+
+  dark_theme_gray(base_size = 14)
 
 ##Survival
 p3<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanSurvival)) +
   geom_ribbon(aes(ymin=GA_means$meanSurvival-GA_SD$meanSurvival, ymax=GA_means$meanSurvival+GA_SD$meanSurvival),
               alpha=0.3) +
-  geom_line(color="black", size=1)+
+  geom_line(color="white", size=1)+
   xlab("Generation")+ ylab("Survival")+
-  coord_cartesian(ylim = c(0.049, 1))
+  coord_cartesian(ylim = c(0.049, 1))+
+  dark_theme_gray(base_size = 14)
 
 ##Relatedness plot
 p4<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Relatedness)) +
@@ -319,16 +322,18 @@ p4<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Relatedness)) +
               alpha=0.3) +
   geom_line(color="orange", size=1)+
   xlab("Generation")+ ylab("Relatedness")+
-  coord_cartesian(ylim = c(0.049, 1))
+  coord_cartesian(ylim = c(0.049, 1))+
+  dark_theme_gray(base_size = 14)
 
 
 ##Population stability?
-p5<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Num_helpers)) +
-  geom_ribbon(aes(ymin=GA_means$Num_helpers-GA_SD$Num_helpers, ymax=GA_means$Num_helpers+GA_SD$Num_helpers),
+p5<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Group_size)) +
+  geom_ribbon(aes(ymin=GA_means$Group_size-GA_SD$Group_size, ymax=GA_means$Group_size+GA_SD$Group_size),
               alpha=0.3) +
   geom_line(color="purple", size=1)+
-  xlab("Generation")+ ylab("Number of helpers")
-  #coord_cartesian(ylim = c(0.049, 5))
+  xlab("Generation")+ ylab("Group size")+
+  coord_cartesian(ylim = c(0.049, 5))+
+  dark_theme_gray(base_size = 14)
 
 
 ##Cummulative help in fecundity
@@ -336,7 +341,8 @@ p6<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanCumHelp)) +
   geom_ribbon(aes(ymin=GA_means$meanCumHelp-GA_SD$meanCumHelp, ymax=GA_means$meanCumHelp+GA_SD$meanCumHelp),
               alpha=0.3) +
   geom_line(color="red", size=1)+
-  xlab("Generation")+ ylab("Cummulative help")
+  xlab("Generation")+ ylab("Cummulative help")+
+  dark_theme_gray()
 
 ##Proportion of floaters that become breeders compared to helpers plot
 p7<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$propFloatBreeder)) +
@@ -349,7 +355,7 @@ p7<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$propFloatBreeder)) +
 
 
 
-grid.arrange(p1, p2, p6, p4, p5, p3, nrow = 3)
+grid.arrange(p2,p2,p1,p4, p5, p3, nrow = 3)
 
 
 ########### REACTION NORMS ####################

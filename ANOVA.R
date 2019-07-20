@@ -4,7 +4,7 @@ getwd()
 setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
 #setwd('~/Documents/Model/excel_files')
 
-results<-read.table("SEM-NRN.csv",header = TRUE, sep=",")
+results<-read.table("SEM-RN.csv",header = TRUE, sep=",")
 names(results)[names(results) == 'ï..Replica'] <- 'Replica'
 
 
@@ -21,7 +21,7 @@ str(results)
 #View(esmd)
 #summary(results)
 
-resultsH<-subset(results,  Num_helpers>0.5)
+resultsH<-subset(results,  Num_helpers>1)
 
 
 #Means and summary statistics by group
@@ -134,7 +134,7 @@ sumBias_R
 
 #ANOVA
 
-results_ANOVA_Help <- aov(Help ~ X0 + Xh + Xn + K1 , data = resultsH)
+results_ANOVA_Help <- aov(Help ~ X0 + Xh + Xn + K1 + Bias, data = resultsH)
 summary(results_ANOVA_Help)
 
 results_ANOVA_Dispersal <- aov(Dispersal ~ X0 + Xh + Xn + K1 + Bias, data = results)
@@ -145,7 +145,7 @@ summary(results_ANOVA_Relatedness)
 
 #Tukey multiple pairwise-comparisons
 
-TukeyHSD(results_ANOVA, which = "Xn")
+TukeyHSD(results_ANOVA_Dispersal, which = "Xn")
 
 
 
@@ -168,4 +168,5 @@ ggboxplot(resultsH, x = "Num_helpers", y = "Help", color = "K1",
 
 ggboxplot(resultsH, x = "Num_helpers", y = "Help", color = "Bias",
           palette = c("#00AFBB", "#E7B800"))
+
 

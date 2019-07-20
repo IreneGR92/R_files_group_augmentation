@@ -22,7 +22,7 @@ ggplot(mdf, aes(x=Age, y=Dispersal.values,col=Input)) +
   geom_line(size=1)+
   xlab("Age")+ ylab("Dispersal")+
   scale_color_manual(values = c("green","blue", "purple", "red", "orange"))+
-  dark_theme_gray()
+  dark_theme_gray(base_size = 20)
   
 
 #HELP
@@ -47,7 +47,7 @@ ggplot(mdf, aes(x=Age, y=Help.values,col=Input)) +
   xlab("Age")+ ylab("Help")+
   scale_color_manual(values = c("green","blue", "purple", "red"))+
   coord_cartesian(ylim = c(0.049, 3))+
-  dark_theme_gray()
+  dark_theme_gray(base_size = 20)
 
 
 
@@ -141,7 +141,7 @@ ggplot(mdf, aes(x=Cumulative_help, y=Fecundity.values,col=Input)) +
   xlab("Cummulative help in group")+ ylab("Fecundity")+
   scale_color_manual(values = c("green","blue", "red", "orange"))+
   coord_cartesian(ylim = c(1, 2)) +
-  dark_theme_gray()
+  dark_theme_gray(base_size = 20)
 
 
 

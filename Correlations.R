@@ -15,7 +15,10 @@ results$K1<-as.factor(results$K1)
 results$Bias<-as.factor(results$Bias)
 str(results)
 
-resultsH<-subset(results,  Num_helpers>0.5)
+resultsH<-subset(results,  Num_helpers>1)
+resultsH<-subset(resultsH,  Help<4.1)
+resultsH<-subset(resultsH,  CumHelp<4.1)
+
 #sub<-subset(results, Help >1.75)
 #View(sub)
 
@@ -29,16 +32,16 @@ library("ggplot2")
 library("gtable")
 library("grid")
 library("gridExtra")
-library(ggdark)
 
+invert_geom_defaults()
 
 
 g1<-ggscatter(resultsH, x = "Relatedness", y = "Help", 
               add = "reg.line", conf.int = TRUE, 
               cor.coef = TRUE, cor.method = "spearman",
-              cor.coeff.args = list(label.x = 0.25),
+              cor.coeff.args = list(label.x = 0.2),
               xlab = "Relatedness", ylab = "Help")
-
+g1
 
 g2<-ggscatter(results, x = "Relatedness", y = "Dispersal", 
               add = "reg.line", conf.int = TRUE, 
@@ -90,7 +93,7 @@ g6<-ggscatter(results, x = "Relatedness", y = "Num_helpers",
 g7<-ggscatter(resultsH, x = "Relatedness", y = "Help_Disp", 
               add = "reg.line", conf.int = TRUE, 
               cor.coef = TRUE, cor.method = "spearman",
-              cor.coeff.args = list(label.x = 0),
+              cor.coeff.args = list(label.x = 0.2),
               xlab = "Relatedness", ylab = "Help-Dispersal")
 
 g8<-ggscatter(resultsH, x = "Survival", y = "Help", 
@@ -108,5 +111,41 @@ g10<-ggscatter(results, x = "Survival", y = "Relatedness",
                cor.coef = TRUE, cor.method = "spearman",
                xlab = "Survival", ylab = "Relatedness")
 
+resultsH$propHelperB<-1-resultsH$propFloaterB
+
+ggscatter(resultsH, x = "propHelperB", y = "Help", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "spearman",
+          cor.coeff.args = list(label.x = 0.6),
+          xlab = "Proportion of helpers that become breeders", ylab = "Help")
+
+ggscatter(resultsH, x = "propFloaterB", y = "Help_Disp", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "spearman",
+          cor.coeff.args = list(label.x = 0.2),
+          xlab = "Proportion of floaters that become breeders", ylab = "Help_Disp")
+
 
 grid.arrange(g1, g2, g3, g4, g5, g6, g7,g8, g9,g10, nrow = 5)
+
+
+
+ggscatter(results, x = "Age", y = "Dispersal", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "spearman",
+          cor.coeff.args = list(label.x = 6.5),
+          xlab = "Age", ylab = "Dispersal")
+
+ggscatter(resultsH, x = "Age", y = "Help", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "spearman",
+          cor.coeff.args = list(label.x = 6.5),
+          xlab = "Age", ylab = "Help")
+
+g11<-ggscatter(results, x = "Age", y = "Relatedness", 
+               add = "reg.line", conf.int = TRUE, 
+               cor.coef = TRUE, cor.method = "spearman",
+               cor.coeff.args = list(label.x = 3),
+               xlab = "Age", ylab = "Relatedness")
+g11<-ggpar(g11, ylim = c(0.05, 0.55))
+g11
