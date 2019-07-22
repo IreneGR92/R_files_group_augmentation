@@ -354,30 +354,63 @@ grid.arrange(p1, p2, p6, p4, p5, p3, nrow = 3)
 
 ########### REACTION NORMS ####################
 
-# par(mfrow = c(3, 2))
-# age<-seq(from=1,by=1, length=11)
-# 
-# # HELP
-# if(Parameters[1,2]==1){
-# replace_with_zero_if_below_zero <- function(x) {
-#   x <- ifelse(x<0,0,x)
-#   return(x)
-# }
-# 
-# help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
-#   help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
-#   help<-ifelse(help<0,0,help)
-#   return(help)}
-# 
-# helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
-# }
-# 
-# # DISPERSAL
-# 
-# if(Parameters[2,2]==1){
-# dispersal<-1 / (1 + exp(meanBetaAge*age - meanBeta))
-# dispersalP<-plot(age,dispersal, type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", ylim=range(min=0, max=1))
-# }
+par(mfrow = c(3, 4))
+age<-seq(from=1,by=1, length=11)
+
+# HELP
+if(Parameters[1,2]==1){
+  replace_with_zero_if_below_zero <- function(x) {
+    x <- ifelse(x<0,0,x)
+    return(x)
+  }
+  
+  help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
+    help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
+    help<-ifelse(help<0,0,help)
+    return(help)}
+  
+  meanAlpha<-do_mean_LG(GA$meanAlpha, 10000)
+  meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 10000)
+  meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 10000)
+  helpP2<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 10000", ylim=range(min=0, max=1))
+  meanAlpha<-do_mean_LG(GA$meanAlpha, 25000)
+  meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 25000)
+  meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 25000)
+  helpP3<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 25000", ylim=range(min=0, max=1))
+  meanAlpha<-do_mean_LG(GA$meanAlpha, 50000)
+  meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 50000)
+  meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 50000)
+  helpP4<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 50000", ylim=range(min=0, max=1))
+  meanAlpha<-do_mean_LG(GA$meanAlpha, 100000)
+  meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 100000)
+  meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 100000)
+  helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Last generation", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
+  
+}
+
+# DISPERSAL
+
+if(Parameters[2,2]==1){
+  dispersal_Formula<-function(meanBeta, meanBetaAge){
+    dispersal = 1 / (1 + exp(meanBetaAge*age - meanBeta))
+    return(dispersal)
+  }
+  
+  meanBeta<-do_mean_LG(GA$meanBeta, 10000)
+  meanBetaAge<-do_mean_LG(GA$meanBetaAge, 10000)
+  dispersalP<-plot(age,dispersal_Formula(meanBeta, meanBetaAge), type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", main="Generation 10000", ylim=range(min=0, max=1))
+  meanBeta<-do_mean_LG(GA$meanBeta, 25000)
+  meanBetaAge<-do_mean_LG(GA$meanBetaAge, 25000)
+  dispersalP<-plot(age,dispersal_Formula(meanBeta, meanBetaAge), type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", main="Generation 25000", ylim=range(min=0, max=1))
+  meanBeta<-do_mean_LG(GA$meanBeta, 50000)
+  meanBetaAge<-do_mean_LG(GA$meanBetaAge, 50000)
+  dispersalP<-plot(age,dispersal_Formula(meanBeta, meanBetaAge), type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", main="Generation 50000", ylim=range(min=0, max=1))
+  meanBeta<-do_mean_LG(GA$meanBeta, 100000)
+  meanBetaAge<-do_mean_LG(GA$meanBetaAge, 100000)
+  dispersalP<-plot(age,dispersal_Formula(meanBeta, meanBetaAge), type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", main="Last generation", ylim=range(min=0, max=1))
+  
+}
+
 
 
 
