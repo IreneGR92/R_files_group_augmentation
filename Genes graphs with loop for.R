@@ -15,9 +15,9 @@ library(ggpubr)
 library(magrittr)
 
 #directory<-"~/Documents/Model/Results/NRN/" #Linux
-#directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\16.06.19\\NRN\\"  #Work 
+directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\RN\\"  #Work 
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\No_relatedness\\"  #Home
+#directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\No_relatedness\\"  #Home
 
 getwd()
 
@@ -289,7 +289,7 @@ title(nameFile)
 par(mfrow = c(1, 1))
 
 ##Help plot
-p1<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanHelp)) +
+pHelp<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanHelp)) +
   geom_ribbon(aes(ymin=GA_means$meanHelp-GA_SD$meanHelp, ymax=GA_means$meanHelp+GA_SD$meanHelp),
               alpha=0.3) +
   geom_line(color="red", size=1)+
@@ -298,7 +298,7 @@ p1<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanHelp)) +
 
 
 ##Dispersal plot
-p2<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanDispersal)) +
+pDispersal<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanDispersal)) +
   geom_ribbon(aes(ymin=GA_means$meanDispersal-GA_SD$meanDispersal, ymax=GA_means$meanDispersal+GA_SD$meanDispersal),
               alpha=0.3) +
   geom_line(color="blue", size=1)+
@@ -306,7 +306,7 @@ p2<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanDispersal)) +
   coord_cartesian(ylim = c(0.049, 1))
 
 ##Survival
-p3<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanSurvival)) +
+pSurvival<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanSurvival)) +
   geom_ribbon(aes(ymin=GA_means$meanSurvival-GA_SD$meanSurvival, ymax=GA_means$meanSurvival+GA_SD$meanSurvival),
               alpha=0.3) +
   geom_line(color="black", size=1)+
@@ -314,7 +314,7 @@ p3<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanSurvival)) +
   coord_cartesian(ylim = c(0.049, 1))
 
 ##Relatedness plot
-p4<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Relatedness)) +
+pRelatedness<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Relatedness)) +
   geom_ribbon(aes(ymin=GA_means$Relatedness-GA_SD$Relatedness, ymax=GA_means$Relatedness+GA_SD$Relatedness),
               alpha=0.3) +
   geom_line(color="orange", size=1)+
@@ -323,7 +323,7 @@ p4<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Relatedness)) +
 
 
 ##Population stability?
-p5<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Num_helpers)) +
+pGroupSize<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Num_helpers)) +
   geom_ribbon(aes(ymin=GA_means$Num_helpers-GA_SD$Num_helpers, ymax=GA_means$Num_helpers+GA_SD$Num_helpers),
               alpha=0.3) +
   geom_line(color="purple", size=1)+
@@ -332,14 +332,14 @@ p5<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Num_helpers)) +
 
 
 ##Cummulative help in fecundity
-p6<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanCumHelp)) +
+pCumHelp<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$meanCumHelp)) +
   geom_ribbon(aes(ymin=GA_means$meanCumHelp-GA_SD$meanCumHelp, ymax=GA_means$meanCumHelp+GA_SD$meanCumHelp),
               alpha=0.3) +
   geom_line(color="red", size=1)+
   xlab("Generation")+ ylab("Cummulative help")
 
 ##Proportion of floaters that become breeders compared to helpers plot
-p7<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$propFloatBreeder)) +
+pPropFloatBreeder<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$propFloatBreeder)) +
   geom_ribbon(aes(ymin=GA_means$propFloatBreeder-GA_SD$propFloatBreeder, ymax=GA_means$propFloatBreeder+GA_SD$propFloatBreeder),
               alpha=0.3) +
   geom_line(color="green", size=1)+
@@ -349,7 +349,7 @@ p7<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$propFloatBreeder)) +
 
 
 
-grid.arrange(p1, p2, p6, p4, p5, p3, nrow = 3)
+grid.arrange(pHelp, pDispersal, pCumHelp, pPropFloatBreeder, pRelatedness, pGroupSize, pSurvival, nrow = 4)
 
 
 ########### REACTION NORMS ####################
@@ -363,29 +363,32 @@ if(Parameters[1,2]==1){
     x <- ifelse(x<0,0,x)
     return(x)
   }
-  
+
   help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
     help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
     help<-ifelse(help<0,0,help)
     return(help)}
-  
+
   meanAlpha<-do_mean_LG(GA$meanAlpha, 10000)
   meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 10000)
   meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 10000)
   helpP2<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 10000", ylim=range(min=0, max=1))
+  
   meanAlpha<-do_mean_LG(GA$meanAlpha, 25000)
   meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 25000)
   meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 25000)
   helpP3<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 25000", ylim=range(min=0, max=1))
+  
   meanAlpha<-do_mean_LG(GA$meanAlpha, 50000)
   meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 50000)
   meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 50000)
   helpP4<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 50000", ylim=range(min=0, max=1))
+  
   meanAlpha<-do_mean_LG(GA$meanAlpha, 100000)
   meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 100000)
   meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 100000)
   helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Last generation", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
-  
+
 }
 
 # DISPERSAL
@@ -395,7 +398,7 @@ if(Parameters[2,2]==1){
     dispersal = 1 / (1 + exp(meanBetaAge*age - meanBeta))
     return(dispersal)
   }
-  
+
   meanBeta<-do_mean_LG(GA$meanBeta, 10000)
   meanBetaAge<-do_mean_LG(GA$meanBetaAge, 10000)
   dispersalP<-plot(age,dispersal_Formula(meanBeta, meanBetaAge), type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", main="Generation 10000", ylim=range(min=0, max=1))
@@ -408,8 +411,35 @@ if(Parameters[2,2]==1){
   meanBeta<-do_mean_LG(GA$meanBeta, 100000)
   meanBetaAge<-do_mean_LG(GA$meanBetaAge, 100000)
   dispersalP<-plot(age,dispersal_Formula(meanBeta, meanBetaAge), type="l", col="blue", lwd=3, xlab="Age", ylab="Dispersal", main="Last generation", ylim=range(min=0, max=1))
-  
+
 }
+
+########################## DEVELOPMENT 
+
+# replace_with_zero_if_below_zero <- function(x) {
+#   x <- ifelse(x<0,0,x)
+#   return(x)
+# }
+# 
+# help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2,age){
+#   help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
+#   help<-ifelse(help<0,0,help)
+#   return(help)}
+# 
+# dispersal_Formula<-function(meanBeta, meanBetaAge){
+#   dispersal = 1 / (1 + exp(meanBetaAge*age - meanBeta))
+#   return(dispersal)}
+# 
+#   age<-seq(from=1,by=1, length=11)
+#   
+#   meanAlpha<-do_mean_LG(GA$meanAlpha, 100000)
+#   meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 100000)
+#   meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 100000)
+#   meanBeta<-do_mean_LG(GA$meanBeta, 100000)
+#   meanBetaAge<-do_mean_LG(GA$meanBetaAge, 100000)
+#   
+# ggplot(data.frame(x=seq(from=1,by=1, length=11)),aes(x))+
+#   stat_function(fun = help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2,age))
 
 
 
@@ -468,3 +498,9 @@ dev.off() # Close the pdf file
 
 #########################################################################################################################################
 
+# helpP2<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=2, xlab="Age", ylab="",main="Generation 10000", ylim=range(min=0, max=1))
+# mtext("Help", side=2, col="red", line=2.5)
+# par(new = T)
+# dispersalP<-plot(age,dispersal_Formula(meanBeta, meanBetaAge), type="l", col="blue", axes = FALSE, lwd=2,  bty = "n", lty = 5, xlab=NA, ylab=NA, ylim=range(min=0, max=1))
+# mtext("Dispersal", side=4, col="blue", line=10)
+# axis(side = 4)
