@@ -15,9 +15,9 @@ library(ggpubr)
 library(magrittr)
 
 #directory<-"~/Documents/Model/Results/RN-No_help/" #Linux
-directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\RN-No_help\\new\\"  #Work 
+#directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\RN-No_help\\new\\"  #Work 
 #directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
-#directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\RN-No_help\\"  #Home
+directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\results\\"  #Home
 
 getwd()
 
@@ -33,18 +33,18 @@ i=i+1
 
 nameFile<-files_main[i] #delete the .txt
 nameFile<-gsub('.{4}$', '', nameFile)
-nameFile<-substring(nameFile, 20)
+nameFile<-substring(nameFile, 17) #20 for group_augmentation, 17 for main_parameters
 
 
 setwd(paste(directory, "main",sep=""))
-Parameters<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""), skip=1, nrows=31)
+Parameters<-read.table(paste("main_parameters_", nameFile, ".txt",sep=""), skip=1, nrows=31) #group_augmentation_
 Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
-GA<-read.table(paste("group_augmentation_", nameFile, ".txt",sep=""),header = TRUE,skip=33)
+GA<-read.table(paste("main_parameters_", nameFile, ".txt",sep=""),header = TRUE,skip=33)
 
 
 #Last generation
 setwd(paste(directory, "last_generation",sep=""))
-GA2<-read.table(paste("group_augmentation_last_generation_", nameFile, ".txt",sep=""), header = TRUE, skip=33) 
+GA2<-read.table(paste("last_generation_parameters_", nameFile, ".txt",sep=""), header = TRUE, skip=33) #group_augmentation_last_generation_
 GA2 <- subset(GA2, age>0)
 setDF(GA2)
 
