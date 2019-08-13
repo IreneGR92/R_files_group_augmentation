@@ -1,10 +1,10 @@
 rm(list=ls())
 getwd()
-#setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
-setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
+setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
+#setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
 #setwd('~/Documents/Model/excel_files')
 
-results<-read.table("SEM-RN.csv",header = TRUE, sep=",")
+results<-read.table("NRN-RN.csv",header = TRUE, sep=",")
 names(results)[names(results) == 'ï..Replica'] <- 'Replica'
 
 
@@ -14,6 +14,12 @@ results$Xn<-as.ordered(results$Xn)
 results$K1<-as.factor(results$K1)
 results$Bias<-as.factor(results$Bias)
 
+resultsH<-subset(results,  Num_helpers>1)
+results$Bias<-as.numeric(results$Bias)
+resultsH<-subset(results,  Bias<10)
+mean(resultsH$Bias)
+results$Bias<-as.factor(results$Bias)
+resultsH$Bias<-as.factor(resultsH$Bias)
 
 
 #head(results)
@@ -21,7 +27,7 @@ str(results)
 #View(esmd)
 #summary(results)
 
-resultsH<-subset(results,  Num_helpers>1)
+
 
 
 #Means and summary statistics by group
@@ -56,11 +62,16 @@ sumBias_H <- summarySE(resultsH,
                  measurevar="Help", 
                  groupvars=c("Bias"))
 
+sumRN_H <- summarySE(resultsH, 
+                       measurevar="Help", 
+                       groupvars=c("Reaction_norm"))
+
 sumX0_H
 sumXh_H
 sumXn_H
 sumK1_H
 sumBias_H
+sumRN_H
 
 
 
@@ -90,11 +101,16 @@ sumBias_D <- summarySE(results,
                        measurevar="Dispersal", 
                        groupvars=c("Bias"))
 
+sumRN_D <- summarySE(results, 
+                     measurevar="Dispersal", 
+                     groupvars=c("Reaction_norm"))
+
 sumX0_D
 sumXh_D
 sumXn_D
 sumK1_D
 sumBias_D
+sumRN_D
 
 
 #Relatedness
@@ -170,3 +186,45 @@ ggboxplot(resultsH, x = "Num_helpers", y = "Help", color = "Bias",
           palette = c("#00AFBB", "#E7B800"))
 
 
+
+
+ggboxplot(resultsH, x = "Bias", y = "Help", color = "Reaction_norm",
+          palette = c("#00AFBB", "#E7B800"))
+
+ggboxplot(resultsH, x = "X0", y = "Help", color = "Reaction_norm",
+          palette = c("#00AFBB", "#E7B800"))
+
+ggboxplot(resultsH, x = "Xn", y = "Help", color = "Reaction_norm",
+          palette = c("#00AFBB", "#E7B800"))
+
+ggboxplot(resultsH, x = "Xh", y = "Help", color = "Reaction_norm",
+          palette = c("#00AFBB", "#E7B800"))
+
+ggboxplot(resultsH, x = "K1", y = "Help", color = "Reaction_norm",
+          palette = c("#00AFBB", "#E7B800"))
+
+results_ANOVA_Help <- aov(Help ~ X0 + Xh + Xn + K1 + Bias + Reaction_norm, data = resultsH)
+summary(results_ANOVA_Help)
+
+
+
+ggboxplot(results, x = "Bias", y = "Dispersal", color = "Reaction_norm",
+          palette = c("#00AFBB", "#E7B800"))
+
+ggboxplot(results, x = "X0", y = "Dispersal", color = "Reaction_norm",
+          palette = c("#00AFBB", "#E7B800"))
+
+ggboxplot(results, x = "Xn", y = "Dispersal", color = "Reaction_norm",
+          palette = c("#00AFBB", "#E7B800"))
+
+ggboxplot(results, x = "Xh", y = "Dispersal", color = "Reaction_norm",
+          palette = c("#00AFBB", "#E7B800"))
+
+ggboxplot(results, x = "K1", y = "Dispersal", color = "Reaction_norm",
+          palette = c("#00AFBB", "#E7B800"))
+
+results_ANOVA_Dispersal <- aov(Dispersal ~ X0 + Xh + Xn + K1 + Bias + Reaction_norm, data = results)
+summary(results_ANOVA_Dispersal)
+
+results_ANOVA_Relatedness <- aov(Relatedness ~ X0 + Xh + Xn + K1 + Bias + Reaction_norm, data = results)
+summary(results_ANOVA_Relatedness)

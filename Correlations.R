@@ -1,12 +1,13 @@
 rm(list=ls())
 getwd()
-#setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
-setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
+setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
+#setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
 #setwd('~/Documents/Model/excel_files')
 
-results<-read.table("SEM-NRN.csv",header = TRUE, sep=",")
+results<-read.table("NRN-RN.csv",header = TRUE, sep=",")
 names(results)[names(results) == 'ï..Replica'] <- 'Replica'
 
+str(results)
 
 results$X0<-as.factor(results$X0)
 results$Xh<-as.factor(results$Xh)
@@ -16,12 +17,8 @@ results$Bias<-as.factor(results$Bias)
 str(results)
 
 resultsH<-subset(results,  Num_helpers>1)
-resultsH<-subset(resultsH,  Help<4.1)
-resultsH<-subset(resultsH,  CumHelp<4.1)
-
-#sub<-subset(results, Help >1.75)
-#View(sub)
-
+#resultsH<-subset(resultsH,  Help<4.1)
+#resultsH<-subset(resultsH,  CumHelp<4.1)
 
 
 
