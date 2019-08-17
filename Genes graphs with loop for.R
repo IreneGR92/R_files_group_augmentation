@@ -15,9 +15,7 @@ library(ggpubr)
 library(magrittr)
 
 #directory<-"~/Documents/Model/Results/RN-No_help/" #Linux
-#directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\RN-No_help\\new\\"  #Work 
-#directory<-"C:\\Users\\ig17c521\\Documents\\Group-augmentation-Cplusplus\\results\\"  #Work
-directory<-"C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\txt_files\\results\\"  #Home
+directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\New_default\\"  #Home/Work
 
 getwd()
 
@@ -112,6 +110,38 @@ do_SD_LG<-function(x,y){
 gen_with_help<-100000
 gen_without_help<-25000
 
+#For each replica last generation
+meanAlphaR<-GA$meanAlpha[GA$Generation==gen_with_help]
+meanAlphaAgeR<-GA$meanAlphaAge[GA$Generation==gen_with_help]
+meanAlphaAge2R<-GA$meanAlphaAge2[GA$Generation==gen_with_help]
+meanBetaR<-GA$meanBeta[GA$Generation==gen_with_help]
+meanBetaAgeR<-GA$meanBetaAge[GA$Generation==gen_with_help]
+meanAgeR<-GA$Age[GA$Generation==gen_with_help]
+meanNumHelpersR<-GA$Num_helpers[GA$Generation==gen_with_help]
+meanHelpR<-GA$meanHelp[GA$Generation==gen_with_help]
+meanCumHelpR<-GA$meanCumHelp[GA$Generation==gen_with_help]
+meanDispersalR<-GA$meanDispersal[GA$Generation==gen_with_help]
+meanSurvivalR<-GA$meanSurvival[GA$Generation==gen_with_help]
+meanRelatednessR<-GA$Relatedness[GA$Generation==gen_with_help]
+meanCorr_Help_DispR<-GA$corr_Help_Disp[GA$Generation==gen_with_help]
+meanPropFloatBreederR<-GA$propFloatBreeder[GA$Generation==gen_with_help]
+
+#For each replica before evolution help
+meanAlphaRNH<-GA$meanAlpha[GA$Generation==gen_without_help]
+meanAlphaAgeRNH<-GA$meanAlphaAge[GA$Generation==gen_without_help]
+meanAlphaAge2RNH<-GA$meanAlphaAge2[GA$Generation==gen_without_help]
+meanBetaRNH<-GA$meanBeta[GA$Generation==gen_without_help]
+meanBetaAgeRNH<-GA$meanBetaAge[GA$Generation==gen_without_help]
+meanAgeRNH<-GA$Age[GA$Generation==gen_without_help]
+meanNumHelpersRNH<-GA$Num_helpers[GA$Generation==gen_without_help]
+meanHelpRNH<-GA$meanHelp[GA$Generation==gen_without_help]
+meanCumHelpRNH<-GA$meanCumHelp[GA$Generation==gen_without_help]
+meanDispersalRNH<-GA$meanDispersal[GA$Generation==gen_without_help]
+meanSurvivalRNH<-GA$meanSurvival[GA$Generation==gen_without_help]
+meanRelatednessRNH<-GA$Relatedness[GA$Generation==gen_without_help]
+meanCorr_Help_DispRNH<-GA$corr_Help_Disp[GA$Generation==gen_without_help]
+meanPropFloatBreederRNH<-GA$propFloatBreeder[GA$Generation==gen_without_help]
+
 #For the last generation, after the evolution of help
 meanAlpha<-do_mean_LG(GA$meanAlpha, gen_with_help)
 meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, gen_with_help)
@@ -164,21 +194,6 @@ SD_SurvivalNH<-do_SD_LG(GA$meanSurvival, gen_without_help)
 SD_RelatednessNH<-do_SD_LG(GA$Relatedness, gen_without_help)
 SD_PropFloatBreederNH<-do_SD_LG(GA$propFloatBreeder, gen_without_help)
 
-#For each replica
-meanAlphaR<-GA$meanAlpha[GA$Generation==100000]
-meanAlphaAgeR<-GA$meanAlphaAge[GA$Generation==100000]
-meanAlphaAge2R<-GA$meanAlphaAge2[GA$Generation==100000]
-meanBetaR<-GA$meanBeta[GA$Generation==100000]
-meanBetaAgeR<-GA$meanBetaAge[GA$Generation==100000]
-meanAgeR<-GA$Age[GA$Generation==100000]
-meanNumHelpersR<-GA$Num_helpers[GA$Generation==100000]
-meanHelpR<-GA$meanHelp[GA$Generation==100000]
-meanCumHelpR<-GA$meanCumHelp[GA$Generation==100000]
-meanDispersalR<-GA$meanDispersal[GA$Generation==100000]
-meanSurvivalR<-GA$meanSurvival[GA$Generation==100000]
-meanRelatednessR<-GA$Relatedness[GA$Generation==100000]
-meanCorr_Help_DispR<-GA$corr_Help_Disp[GA$Generation==100000]
-meanPropFloatBreederR<-GA$propFloatBreeder[GA$Generation==100000]
 
 
 descriptivesR <- data.frame( ID=c(nameFile),
@@ -196,6 +211,22 @@ descriptivesR <- data.frame( ID=c(nameFile),
                              Num_helpers=c(meanNumHelpersR),
                              Help_Disp=c(meanCorr_Help_DispR),
                              propFloaterB=c(meanPropFloatBreederR))
+
+descriptivesRNH <- data.frame( ID=c(nameFile),
+                             X0=c(Parameters[13,2]),
+                             Xh=c(Parameters[14,2]),
+                             Xn=c(Parameters[15,2]),
+                             K1=c(Parameters[17,2]),
+                             Bias=c(Parameters[12,2]),
+                             Help=c(meanHelpRNH),
+                             CumHelp=c(meanCumHelpRNH),
+                             Dispersal=c(meanDispersalRNH),
+                             Survival=c(meanSurvivalRNH),
+                             Relatedness=c(meanRelatednessRNH),
+                             Age=c(meanAgeRNH),
+                             Num_helpers=c(meanNumHelpersRNH),
+                             Help_Disp=c(meanCorr_Help_DispRNH),
+                             propFloaterB=c(meanPropFloatBreederRNH))
 
 
 descriptives <- data.frame(Variable=c("alpha", "alphaAge", "alphaAge2",
@@ -227,7 +258,8 @@ descriptivesNH <- data.frame(Variable=c("beta", "betaAge",
 
 
 write.xlsx(descriptivesR, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Result per replica", append = FALSE)
-write.xlsx(descriptives, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Results", append = TRUE)# append TRUE to create a new sheet in the same file
+write.xlsx(descriptivesRNH, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Result per replica bef help", append = TRUE) # append TRUE to create a new sheet in the same file
+write.xlsx(descriptives, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Results", append = TRUE)
 write.xlsx(descriptivesNH, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Result before help", append = TRUE)
 write.xlsx(Parameters, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Parameters", append = TRUE)
 
@@ -525,7 +557,7 @@ dev.off() # Close the pdf file
 
 }
 
-#########################################################################################################################################
+  #########################################################################################################################################
 
 
 # ########################## DEVELOPMENT 
