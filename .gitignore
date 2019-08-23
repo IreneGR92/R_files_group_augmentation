@@ -1,4 +1,4 @@
 .Rhistory
 .Rproj.user
 R_files_group_augmentation.Rproj
-.db
+*.db
