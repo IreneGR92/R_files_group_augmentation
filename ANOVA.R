@@ -3,24 +3,19 @@ getwd()
 setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
 #setwd('~/Documents/Model/excel_files')
 
-results<-read.table("Results_default.csv",header = TRUE, sep=",")
-names(results)[names(results) == 'ï..Replica'] <- 'Replica'
+library(readxl)
+results_original <- read_excel("NRN-Low_survival_floaters.xlsx")
 
+results_original$X0<-as.factor(results_original$X0)
+results_original$Xh<-as.factor(results_original$Xh)
+results_original$Xn<-as.ordered(results_original$Xn)
+results_original$K1<-as.factor(results_original$K1)
+results_original$Bias<-as.factor(results_original$Bias)
+results_original$Evol_help<-as.factor(results_original$Evol_help)
+results_original$Reaction_norm<-as.factor(results_original$Reaction_norm)
+#results_original$Implementation<-as.factor(results_original$Implementation)
 
-results$X0<-as.factor(results$X0)
-results$Xh<-as.factor(results$Xh)
-results$Xn<-as.ordered(results$Xn)
-results$K1<-as.factor(results$K1)
-results$Bias<-as.factor(results$Bias)
-
-resultsH<-subset(results,  Num_helpers>1)
-
-# results$Bias<-as.numeric(results$Bias)
-# resultsH<-subset(results,  Bias<10)
-# mean(resultsH$Bias)
-# results$Bias<-as.factor(results$Bias)
-# resultsH$Bias<-as.factor(resultsH$Bias)
-
+results<-results_original
 
 #head(results)
 str(results)
@@ -29,7 +24,8 @@ str(results)
 
 results<-subset(results,  Implementation=="Normal")
 results<-subset(results,  Evol_help=="yes")
-results<-subset(results, Help<4)
+resultsH<-subset(results,  Num_helpers>1)
+resultsH<-subset(resultsH, Help<4)
 
 #Means and summary statistics by group
 
@@ -166,123 +162,4 @@ TukeyHSD(results_ANOVA_Dispersal, which = "Xn")
 
 
 
-
-#Interaction plot using summary statistics
-
-library("ggpubr")
-
-resultsH$Num_helpers<-round(results$Num_helpers, digits=0)
-resultsH$Num_helpers<-as.ordered(results$Num_helpers)
-
-ggboxplot(resultsH, x = "Num_helpers", y = "Help", color = "X0",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(resultsH, x = "Num_helpers", y = "Help", color = "Xh",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(resultsH, x = "Num_helpers", y = "Help", color = "K1",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(resultsH, x = "Num_helpers", y = "Help", color = "Bias",
-          palette = c("#00AFBB", "#E7B800"))
-
-
-
-
-ggboxplot(resultsH, x = "Bias", y = "Help", color = "Reaction_norm",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(resultsH, x = "X0", y = "Help", color = "Reaction_norm",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(resultsH, x = "Xn", y = "Help", color = "Reaction_norm",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(resultsH, x = "Xh", y = "Help", color = "Reaction_norm",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(resultsH, x = "K1", y = "Help", color = "Reaction_norm",
-          palette = c("#00AFBB", "#E7B800"))
-
-results_ANOVA_Help <- aov(Help ~ X0 + Xh + Xn + K1 + Bias + Reaction_norm, data = resultsH)
-summary(results_ANOVA_Help)
-
-
-
-ggboxplot(results, x = "Bias", y = "Dispersal", color = "Reaction_norm",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(results, x = "X0", y = "Dispersal", color = "Reaction_norm",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(results, x = "Xn", y = "Dispersal", color = "Reaction_norm",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(results, x = "Xh", y = "Dispersal", color = "Reaction_norm",
-          palette = c("#00AFBB", "#E7B800"))
-
-ggboxplot(results, x = "K1", y = "Dispersal", color = "Reaction_norm",
-          palette = c("#00AFBB", "#E7B800"))
-
-results_ANOVA_Dispersal <- aov(Dispersal ~ X0 + Xh + Xn + K1 + Bias + Reaction_norm, data = results)
-summary(results_ANOVA_Dispersal)
-
-results_ANOVA_Relatedness <- aov(Relatedness ~ X0 + Xh + Xn + K1 + Bias + Reaction_norm, data = results)
-summary(results_ANOVA_Relatedness)
-
-
-
-############################## MORE GRAPHS #####################################
-
-library(ggplot2)
-
-ggplot(results, aes(x = Bias, y = Dispersal)) +
-  geom_boxplot(aes(fill = Evol_help)) +
-  scale_fill_manual(values = c("#d11141", "#ffc425"))+
-  labs(fill ="Evolution of help?") +
-  dark_theme_gray(base_size = 14)
-
-
-data_summary <- function(data, varname, groupnames){
-  require(plyr)
-  summary_func <- function(x, col){
-    c(mean = mean(x[[col]], na.rm=TRUE),
-      sd = sd(x[[col]], na.rm=TRUE))
-  }
-  data_sum<-ddply(data, groupnames, .fun=summary_func,
-                  varname)
-  data_sum <- rename(data_sum, c("mean" = varname))
-  return(data_sum)
-}
-
-
-df2 <- data_summary(results, varname="Dispersal", 
-                    groupnames=c("Bias", "Evol_help"))
-
-
-
-ggplot(df2, aes(x = Bias, y = Dispersal, group = Evol_help, color=Evol_help)) + 
-  geom_line(size=1.2) +
-  geom_point()+
-  geom_errorbar(aes(ymin=Dispersal-sd, ymax=Dispersal+sd), width=0.2, size=1,
-                position=position_dodge(0.05))+
-  coord_cartesian(ylim = c(0, 1))+
-  scale_color_manual(values=c('#0000CC','#009999'))+
-  dark_theme_gray(base_size = 14)
-
-
-
-ggboxplot(results, x = "Reaction_norm", y = "Dispersal")
-
-ggplot(results, aes(x = Reaction_norm, y = Dispersal)) +
-  geom_boxplot(fill="blue") +
-  xlab("Reaction norm to age")+
-  #coord_cartesian(ylim = c(0, 1))+
-  dark_theme_gray(base_size = 14)
-
-ggplot(results, aes(x = Reaction_norm, y = Help)) +
-  geom_boxplot(fill="red") +
-  xlab("Reaction norm to age")+
-  coord_cartesian(ylim = c(0, 2))+
-  dark_theme_gray(base_size = 14)
 

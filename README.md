@@ -1,1 +1,1 @@
-# R_files_group_augmentation
+R files to analyse group augmentation model

@@ -3,22 +3,26 @@ getwd()
 setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
 #setwd('~/Documents/Model/excel_files')
 
-results<-read.table("No-GA.csv",header = TRUE, sep=",")
-names(results)[names(results) == 'ï..Replica'] <- 'Replica'
+library(readxl)
+results_original <- read_excel("NRN-RN.xlsx")
 
-str(results)
 
 #results<-subset(results, Reaction_norm=="RN")
 
-results$X0<-as.factor(results$X0)
-results$Xh<-as.factor(results$Xh)
-results$Xn<-as.ordered(results$Xn)
-results$K1<-as.factor(results$K1)
-results$Bias<-as.factor(results$Bias)
-str(results)
+results_original$X0<-as.factor(results_original$X0)
+results_original$Xh<-as.factor(results_original$Xh)
+results_original$Xn<-as.ordered(results_original$Xn)
+results_original$K1<-as.factor(results_original$K1)
+results_original$Bias<-as.factor(results_original$Bias)
+results_original$Reaction_norm<-as.factor(results_original$Reaction_norm)
 
+str(results_original)
+
+results<-results_original
+results<-subset(results, Reaction_norm %in% c("NRN") )
 resultsH<-subset(results,  Num_helpers>1)
-#resultsH<-subset(resultsH,  Help<4.1)
+
+resultsH<-subset(resultsH,  Help<4.1)
 #resultsH<-subset(resultsH,  CumHelp<4.1)
 
 
@@ -31,17 +35,20 @@ library("gtable")
 library("grid")
 library("gridExtra")
 library("ggExtra")
+library("magrittr")
+library(ggdark)
 
 #invert_geom_defaults()
 
 
 g1<-ggscatter(resultsH, x = "Relatedness", y = "Help", 
+              color = "Reaction_norm",  palette =  c("#FF0000", "#FF9900","#FF9900"),
               add = "reg.line", conf.int = TRUE, 
-              color = "Reaction_norm",
               cor.coef = TRUE, cor.method = "spearman",
-              cor.coeff.args = list(label.x = 0.2),
-              xlab = "Relatedness", ylab = "Help")
-g1
+              cor.coeff.args = list(label.x = 0.2, label.y = 1.1),
+              xlab = "Relatedness", ylab = "Help")+ dark_theme_gray(base_size = 14)
+g1              
+
 
 g2<-ggscatter(results, x = "Relatedness", y = "Dispersal", 
               add = "reg.line", conf.int = TRUE, 
@@ -66,17 +73,19 @@ g3
 g4<-ggscatter(resultsH, x = "Num_helpers", y = "Help", 
               add = "reg.line", conf.int = TRUE, 
               cor.coef = TRUE, cor.method = "spearman",
-              color = "Reaction_norm",
-              cor.coeff.args = list(label.x = 3.5),
-              xlab = "Number of helpers", ylab = "Help")
+              color = "Reaction_norm",  palette = c("#FF0000", "#FF9900"),
+              cor.coeff.args = list(label.x = 7, label.y = 1.1),
+              xlab = "Number of helpers", ylab = "Help")+
+              dark_theme_gray(base_size = 16)
 g4
 
 g4.1<-ggscatter(resultsH, x = "Num_helpers", y = "CumHelp", 
               add = "reg.line", conf.int = TRUE, 
               cor.coef = TRUE, cor.method = "spearman",
-              color = "Reaction_norm",
-              cor.coeff.args = list(label.x = 4.5),
-              xlab = "Number of helpers", ylab = "Cumulative level of help")
+              color = "Reaction_norm",  palette = c("#FF0000", "#FF9900"),
+              cor.coeff.args = list(label.x = 7, label.y = 3.5),
+              xlab = "Number of helpers", ylab = "Cumulative level of help")+
+              dark_theme_gray(base_size = 16)
 g4.1
 
 
@@ -131,9 +140,10 @@ resultsH$propHelperB<-1-resultsH$propFloaterB
 ggscatter(resultsH, x = "propHelperB", y = "Help", 
           add = "reg.line", conf.int = TRUE, 
           cor.coef = TRUE, cor.method = "spearman",
-          color = "Reaction_norm",
+          #color = "Reaction_norm",  palette = c("#FF0000", "#FF9900"),
           cor.coeff.args = list(label.x = 0.6),
-          xlab = "Proportion of helpers that become breeders", ylab = "Help")
+          xlab = "Proportion of helpers that become breeders", ylab = "Help") +
+          dark_theme_gray(base_size = 16)
 
 
 #grid.arrange(g1, g2, g3, g4, g5, g6, g7,g8, g9,g10, nrow = 5)
@@ -143,23 +153,23 @@ ggscatter(resultsH, x = "propHelperB", y = "Help",
 ggscatter(results, x = "Age", y = "Dispersal", 
           add = "reg.line", conf.int = TRUE, 
           cor.coef = TRUE, cor.method = "spearman",
-          color = "Reaction_norm",
+          color = "Reaction_norm", palette = c("#0000CC", "#33CCFF"),
           cor.coeff.args = list(label.x = 6.5),
-          xlab = "Age", ylab = "Dispersal")
+          xlab = "Age", ylab = "Dispersal") + dark_theme_gray(base_size = 14)
 
 ggscatter(resultsH, x = "Age", y = "Help", 
           add = "reg.line", conf.int = TRUE, 
           cor.coef = TRUE, cor.method = "spearman",
-          color = "Reaction_norm",
-          #cor.coeff.args = list(label.x = 0.5),
-          xlab = "Age", ylab = "Help")
+          color = "Reaction_norm", palette = c("#FF0000", "#FF6600"),
+          cor.coeff.args = list(label.x = 7),
+          xlab = "Age", ylab = "Help")+dark_theme_gray(base_size = 14)
 
 g11<-ggscatter(results, x = "Age", y = "Relatedness", 
                add = "reg.line", conf.int = TRUE, 
                cor.coef = TRUE, cor.method = "spearman",
-               color = "Reaction_norm",
-               cor.coeff.args = list(label.x = 3),
-               xlab = "Age", ylab = "Relatedness")
+               color = "Reaction_norm",  palette = c("#FF9900", "#FFFF00"),
+               cor.coeff.args = list(label.x = 3, label.y=0.52),
+               xlab = "Age", ylab = "Relatedness")+ dark_theme_gray(base_size = 14)
 g11<-ggpar(g11, ylim = c(0.05, 0.55))
 g11
 

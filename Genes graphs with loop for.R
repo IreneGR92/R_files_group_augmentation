@@ -15,7 +15,7 @@ library(ggpubr)
 library(magrittr)
 
 #directory<-"~/Documents/Model/Results/RN-No_help/" #Linux
-directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\New_default\\"  #Home/Work
+directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\NEW\\"  #Home/Work
 
 getwd()
 

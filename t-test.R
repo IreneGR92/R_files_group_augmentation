@@ -1,23 +1,34 @@
 rm(list=ls())
 getwd()
-#setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
-setwd('C:\\Users\\igaru\\Documents\\PhD\\CODE\\All_results\\Excel_files')
-#setwd('~/Documents/Model/excel_files')
+setwd('H:\\PhD\\CODE\\All_results\\Excel_files')
+#setwd('~/smb4k/IEEESHFS01.UNIBE.CH/homes/ig17c521/PhD/CODE/All_results/Excel_files/')
 
-results<-read.table("SEM-RN.csv",header = TRUE, sep=",")
-names(results)[names(results) == 'ï..Replica'] <- 'Replica'
+library(readxl)
+results_original <- read_excel("NRN-Low_survival_floaters.xlsx")
+
+#levels(results_original$Reaction_norm)[levels(results_original$Reaction_norm)=="RN"] <- "RN-Dispersal+Help"
+library(plyr)
+#results_original$Reaction_norm<-revalue(results_original$Reaction_norm, c("RN"="RN-Dispersal+Help"))
+
+results_original$X0<-as.factor(results_original$X0)
+results_original$Xh<-as.factor(results_original$Xh)
+results_original$Xn<-as.ordered(results_original$Xn)
+results_original$K1<-as.factor(results_original$K1)
+results_original$Bias<-as.factor(results_original$Bias)
+results_original$Evol_help<-as.factor(results_original$Evol_help)
+results_original$Reaction_norm<-as.factor(results_original$Reaction_norm)
+#results_original$Implementation<-as.factor(results_original$Implementation)
 
 
-results$X0<-as.factor(results$X0)
-results$Xh<-as.factor(results$Xh)
-results$Xn<-as.ordered(results$Xn)
-results$K1<-as.factor(results$K1)
-results$Bias<-as.factor(results$Bias)
-str(results)
-
-
+results<-results_original
 resultsH<-subset(results,  Num_helpers>1)
-#View(sub)
+
+
+#head(results)
+str(results)
+#View(esmd)
+#summary(results)
+
 
 
 ###########################################   BAR GRAPHS   #####################################################################
