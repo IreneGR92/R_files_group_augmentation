@@ -4,6 +4,7 @@ rm(list=ls())
 
 library(ggplot2)
 library(reshape2)
+library(ggdark)
 
 age<-seq(from=1,by=1, length=15)
 
@@ -20,9 +21,9 @@ names(mdf)<-c("Age", "Input", "Dispersal.values")
 ggplot(mdf, aes(x=Age, y=Dispersal.values,col=Input)) +
   geom_line(size=1)+
   xlab("Age")+ ylab("Dispersal")+
-  scale_color_manual(values = c("green","blue", "purple", "red", "orange"))
+  scale_color_manual(values = c("green","blue", "purple", "red", "orange"))+
+  dark_theme_gray(base_size = 20)
   
-
 
 #HELP
 
@@ -36,7 +37,7 @@ help_Formula<-function(alpha, alphaAge, alphaAge2){
   return(help)}
 
 
-DF.help<-data.frame(age, help_Formula(2,0.3,0.03), help_Formula(2,0.3,-0.03), help_Formula(2,-0.3,0.03),help_Formula(2,-0.3,-0.03))
+DF.help<-data.frame(age, help_Formula(1,0.05,0.005), help_Formula(1,0.05,-0.005), help_Formula(1,-0.05,0.005),help_Formula(1,-0.05,-0.005))
 names(DF.help) <- c("Age","linear=+,quadratic=+", "linear= +,quadratic=-", "linear= -,quadratic=+", "linear=-,quadratic=-")
 mdf <- melt(DF.help, id="Age")
 names(mdf)<-c("Age", "Input", "Help.values")
@@ -45,7 +46,8 @@ ggplot(mdf, aes(x=Age, y=Help.values,col=Input)) +
   geom_line(size=1)+
   xlab("Age")+ ylab("Help")+
   scale_color_manual(values = c("green","blue", "purple", "red"))+
-  coord_cartesian(ylim = c(0.049, 10))
+  coord_cartesian(ylim = c(0.049, 3))+
+  dark_theme_gray(base_size = 20)
 
 
 
@@ -96,7 +98,6 @@ gridxy$help<-survival(param,gridxy$x,gridxy$y)
 levelplot(help~x*y,data=gridxy, xlab="Help", ylab="Group size", main="Survival")
 
 
-
 #Value of help from which no effect on survival
 
 help=seq(from=0,by=0.5, length=16)
@@ -139,7 +140,8 @@ ggplot(mdf, aes(x=Cumulative_help, y=Fecundity.values,col=Input)) +
   geom_line(size=1)+
   xlab("Cummulative help in group")+ ylab("Fecundity")+
   scale_color_manual(values = c("green","blue", "red", "orange"))+
-  coord_cartesian(ylim = c(1, 2))
+  coord_cartesian(ylim = c(1, 2)) +
+  dark_theme_gray(base_size = 20)
 
 
 
