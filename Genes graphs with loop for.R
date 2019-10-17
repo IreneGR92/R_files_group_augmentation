@@ -11,8 +11,9 @@ library(xlsx)
 library(data.table)
 library(dplyr)
 library(tidyselect)
-library(ggpubr)
 library(magrittr)
+library(ggpubr)
+
 
 #directory<-"~/Documents/Model/Results/RN-No_help/" #Linux
 directory<-"H:\\PhD\\CODE\\All_results\\txt_files\\NEW\\"  #Home/Work
@@ -35,14 +36,14 @@ nameFile<-substring(nameFile, 17) #20 for group_augmentation, 17 for main_parame
 
 
 setwd(paste(directory, "main",sep=""))
-Parameters<-read.table(paste("main_parameters_", nameFile, ".txt",sep=""), skip=1, nrows=31) #group_augmentation_
+Parameters<-read.table(paste("main_parameters_", nameFile, ".txt",sep=""), skip=1, nrows=29) #group_augmentation_
 Parameters <- mutate(Parameters, V3 = paste(Parameters[,1], Parameters[,2])) 
-GA<-read.table(paste("main_parameters_", nameFile, ".txt",sep=""),header = TRUE,skip=33)
+GA<-read.table(paste("main_parameters_", nameFile, ".txt",sep=""),header = TRUE,skip=31)
 
 
 #Last generation
 setwd(paste(directory, "last_generation",sep=""))
-GA2<-read.table(paste("last_generation_parameters_", nameFile, ".txt",sep=""), header = TRUE, skip=33) #group_augmentation_last_generation_
+GA2<-read.table(paste("last_generation_parameters_", nameFile, ".txt",sep=""), header = TRUE, skip=31) #group_augmentation_last_generation_
 GA2 <- subset(GA2, age>0)
 setDF(GA2)
 
@@ -71,10 +72,25 @@ GA$meanSurvival <- as.character(GA$meanSurvival)
 GA$meanSurvival[GA$meanSurvival == "-1"] <- NA
 GA$meanSurvival <- as.numeric(GA$meanSurvival)
 
-GA$Replica<-as.factor(GA$Replica)
+GA$meanSurvival_H <- as.character(GA$meanSurvival_H)
+GA$meanSurvival_H[GA$meanSurvival_H == "-1"] <- NA
+GA$meanSurvival_H[GA$meanSurvival_H == "NaN"] <- NA
+GA$meanSurvival_H <- as.numeric(GA$meanSurvival_H)
+
+GA$meanSurvival_B <- as.character(GA$meanSurvival_B)
+GA$meanSurvival_B[GA$meanSurvival_B == "-1"] <- NA
+GA$meanSurvival_B[GA$meanSurvival_B == "NaN"] <- NA
+GA$meanSurvival_B <- as.numeric(GA$meanSurvival_B)
+
+GA$meanSurvival_F <- as.character(GA$meanSurvival_F)
+GA$meanSurvival_F[GA$meanSurvival_F == "-1"] <- NA
+GA$meanSurvival_F[GA$meanSurvival_F == "NaN"] <- NA
+GA$meanSurvival_F <- as.numeric(GA$meanSurvival_F)
+
+
+
 
 #apply(GA, 2, function(meanHelp) ifelse(meanHelp > 4, 4, meanHelp))
-
 
 
 ##Means between replicas
@@ -91,7 +107,7 @@ do_sd<-function(x){
 GA_means<-do_mean(GA)
 GA_SD<-do_sd(GA)
 
-
+GA$Replica<-as.factor(GA$Replica)
 
 ################## STATS LAST GENERATION FROM MAIN ############################
 
@@ -113,15 +129,21 @@ gen_without_help<-25000
 #For each replica last generation
 meanAlphaR<-GA$meanAlpha[GA$Generation==gen_with_help]
 meanAlphaAgeR<-GA$meanAlphaAge[GA$Generation==gen_with_help]
-meanAlphaAge2R<-GA$meanAlphaAge2[GA$Generation==gen_with_help]
+#meanAlphaAge2R<-GA$meanAlphaAge2[GA$Generation==gen_with_help]
 meanBetaR<-GA$meanBeta[GA$Generation==gen_with_help]
 meanBetaAgeR<-GA$meanBetaAge[GA$Generation==gen_with_help]
 meanAgeR<-GA$Age[GA$Generation==gen_with_help]
-meanNumHelpersR<-GA$Num_helpers[GA$Generation==gen_with_help]
+meanAgeH_R<-GA$Age_H[GA$Generation==gen_with_help]
+meanAgeB_R<-GA$Age_B[GA$Generation==gen_with_help]
+meanAgeF_R<-GA$Age_F[GA$Generation==gen_with_help]
+meanGroupSizeR<-GA$Group_size[GA$Generation==gen_with_help]
 meanHelpR<-GA$meanHelp[GA$Generation==gen_with_help]
 meanCumHelpR<-GA$meanCumHelp[GA$Generation==gen_with_help]
 meanDispersalR<-GA$meanDispersal[GA$Generation==gen_with_help]
 meanSurvivalR<-GA$meanSurvival[GA$Generation==gen_with_help]
+meanSurvivalH_R<-GA$meanSurvival_H[GA$Generation==gen_with_help]
+meanSurvivalB_R<-GA$meanSurvival_B[GA$Generation==gen_with_help]
+meanSurvivalF_R<-GA$meanSurvival_F[GA$Generation==gen_with_help]
 meanRelatednessR<-GA$Relatedness[GA$Generation==gen_with_help]
 meanCorr_Help_DispR<-GA$corr_Help_Disp[GA$Generation==gen_with_help]
 meanPropFloatBreederR<-GA$propFloatBreeder[GA$Generation==gen_with_help]
@@ -129,15 +151,21 @@ meanPropFloatBreederR<-GA$propFloatBreeder[GA$Generation==gen_with_help]
 #For each replica before evolution help
 meanAlphaRNH<-GA$meanAlpha[GA$Generation==gen_without_help]
 meanAlphaAgeRNH<-GA$meanAlphaAge[GA$Generation==gen_without_help]
-meanAlphaAge2RNH<-GA$meanAlphaAge2[GA$Generation==gen_without_help]
+#meanAlphaAge2RNH<-GA$meanAlphaAge2[GA$Generation==gen_without_help]
 meanBetaRNH<-GA$meanBeta[GA$Generation==gen_without_help]
 meanBetaAgeRNH<-GA$meanBetaAge[GA$Generation==gen_without_help]
 meanAgeRNH<-GA$Age[GA$Generation==gen_without_help]
-meanNumHelpersRNH<-GA$Num_helpers[GA$Generation==gen_without_help]
+meanAgeH_RNH<-GA$Age_H[GA$Generation==gen_without_help]
+meanAgeB_RNH<-GA$Age_B[GA$Generation==gen_without_help]
+meanAgeF_RNH<-GA$Age_F[GA$Generation==gen_without_help]
+meanGroupSizeRNH<-GA$Group_size[GA$Generation==gen_without_help]
 meanHelpRNH<-GA$meanHelp[GA$Generation==gen_without_help]
 meanCumHelpRNH<-GA$meanCumHelp[GA$Generation==gen_without_help]
 meanDispersalRNH<-GA$meanDispersal[GA$Generation==gen_without_help]
 meanSurvivalRNH<-GA$meanSurvival[GA$Generation==gen_without_help]
+meanSurvivalH_RNH<-GA$meanSurvival_H[GA$Generation==gen_without_help]
+meanSurvivalB_RNH<-GA$meanSurvival_B[GA$Generation==gen_without_help]
+meanSurvivalF_RNH<-GA$meanSurvival_F[GA$Generation==gen_without_help]
 meanRelatednessRNH<-GA$Relatedness[GA$Generation==gen_without_help]
 meanCorr_Help_DispRNH<-GA$corr_Help_Disp[GA$Generation==gen_without_help]
 meanPropFloatBreederRNH<-GA$propFloatBreeder[GA$Generation==gen_without_help]
@@ -145,30 +173,42 @@ meanPropFloatBreederRNH<-GA$propFloatBreeder[GA$Generation==gen_without_help]
 #For the last generation, after the evolution of help
 meanAlpha<-do_mean_LG(GA$meanAlpha, gen_with_help)
 meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, gen_with_help)
-meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, gen_with_help)
+#meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, gen_with_help)
 meanBeta<-do_mean_LG(GA$meanBeta, gen_with_help)
 meanBetaAge<-do_mean_LG(GA$meanBetaAge, gen_with_help)
 meanAge<-do_mean_LG(GA$Age, gen_with_help)
-meanNumHelpers<-do_mean_LG(GA$Num_helpers, gen_with_help)
+meanAgeH<-do_mean_LG(GA$Age_H, gen_with_help)
+meanAgeB<-do_mean_LG(GA$Age_B, gen_with_help)
+meanAgeF<-do_mean_LG(GA$Age_F, gen_with_help)
+meanGroupSize<-do_mean_LG(GA$Group_size, gen_with_help)
 meanHelp<-do_mean_LG(GA$meanHelp, gen_with_help)
 meanCumHelp<-do_mean_LG(GA$meanCumHelp, gen_with_help)
 meanDispersal<-do_mean_LG(GA$meanDispersal, gen_with_help)
 meanSurvival<-do_mean_LG(GA$meanSurvival, gen_with_help)
+meanSurvivalH<-do_mean_LG(GA$meanSurvival_H, gen_with_help)
+meanSurvivalB<-do_mean_LG(GA$meanSurvival_B, gen_with_help)
+meanSurvivalF<-do_mean_LG(GA$meanSurvival_F, gen_with_help)
 meanRelatedness<-do_mean_LG(GA$Relatedness, gen_with_help)
 meanCorr_Help_Disp<-do_mean_LG(GA$corr_Help_Disp, gen_with_help)
 meanPropFloatBreeder<-do_mean_LG(GA$propFloatBreeder, gen_with_help)
 
 SD_Alpha<-do_SD_LG(GA$meanAlpha, gen_with_help)
 SD_AlphaAge<-do_SD_LG(GA$meanAlphaAge, gen_with_help)
-SD_AlphaAge2<-do_SD_LG(GA$meanAlphaAge2, gen_with_help)
+#SD_AlphaAge2<-do_SD_LG(GA$meanAlphaAge2, gen_with_help)
 SD_Beta<-do_SD_LG(GA$meanBeta, gen_with_help)
 SD_BetaAge<-do_SD_LG(GA$meanBetaAge, gen_with_help)
 SD_Age<-do_SD_LG(GA$Age, gen_with_help)
-SD_NumHelpers<-do_SD_LG(GA$Num_helpers, gen_with_help)
+SD_AgeH<-do_SD_LG(GA$Age_H, gen_with_help)
+SD_AgeB<-do_SD_LG(GA$Age_B, gen_with_help)
+SD_AgeF<-do_SD_LG(GA$Age_F, gen_with_help)
+SD_GroupSize<-do_SD_LG(GA$Group_size, gen_with_help)
 SD_Help<-do_SD_LG(GA$meanHelp, gen_with_help)
 SD_CumHelp<-do_SD_LG(GA$meanCumHelp, gen_with_help)
 SD_Dispersal<-do_SD_LG(GA$meanDispersal, gen_with_help)
 SD_Survival<-do_SD_LG(GA$meanSurvival, gen_with_help)
+SD_SurvivalH<-do_SD_LG(GA$meanSurvival_H, gen_with_help)
+SD_SurvivalB<-do_SD_LG(GA$meanSurvival_B, gen_with_help)
+SD_SurvivalF<-do_SD_LG(GA$meanSurvival_F, gen_with_help)
 SD_Relatedness<-do_SD_LG(GA$Relatedness, gen_with_help)
 SDcorr_Help_Disp<-do_SD_LG(GA$corr_Help_Disp, gen_with_help)
 SD_PropFloatBreeder<-do_SD_LG(GA$propFloatBreeder, gen_with_help)
@@ -177,20 +217,32 @@ SD_PropFloatBreeder<-do_SD_LG(GA$propFloatBreeder, gen_with_help)
 meanBetaNH<-do_mean_LG(GA$meanBeta, gen_without_help)
 meanBetaAgeNH<-do_mean_LG(GA$meanBetaAge, gen_without_help)
 meanAgeNH<-do_mean_LG(GA$Age, gen_without_help)
-meanNumHelpersNH<-do_mean_LG(GA$Num_helpers, gen_without_help)
+meanAgeH_NH<-do_mean_LG(GA$Age_H, gen_without_help)
+meanAgeB_NH<-do_mean_LG(GA$Age_B, gen_without_help)
+meanAgeF_NH<-do_mean_LG(GA$Age_F, gen_without_help)
+meanGroupSizeNH<-do_mean_LG(GA$Group_size, gen_without_help)
 meanHelpNH<-do_mean_LG(GA$meanHelp, gen_without_help)
 meanDispersalNH<-do_mean_LG(GA$meanDispersal, gen_without_help)
 meanSurvivalNH<-do_mean_LG(GA$meanSurvival, gen_without_help)
+meanSurvivalH_NH<-do_mean_LG(GA$meanSurvival_H, gen_without_help)
+meanSurvivalB_NH<-do_mean_LG(GA$meanSurvival_B, gen_without_help)
+meanSurvivalF_NH<-do_mean_LG(GA$meanSurvival_F, gen_without_help)
 meanRelatednessNH<-do_mean_LG(GA$Relatedness, gen_without_help)
 meanPropFloatBreederNH<-do_mean_LG(GA$propFloatBreeder, gen_without_help)
 
 SD_BetaNH<-do_SD_LG(GA$meanBeta, gen_without_help)
 SD_BetaAgeNH<-do_SD_LG(GA$meanBetaAge, gen_without_help)
 SD_AgeNH<-do_SD_LG(GA$Age, gen_without_help)
-SD_NumHelpersNH<-do_SD_LG(GA$Num_helpers, gen_without_help)
+SD_AgeH_NH<-do_SD_LG(GA$Age_H, gen_without_help)
+SD_AgeB_NH<-do_SD_LG(GA$Age_B, gen_without_help)
+SD_AgeF_NH<-do_SD_LG(GA$Age_F, gen_without_help)
+SD_GroupSizeNH<-do_SD_LG(GA$Group_size, gen_without_help)
 SD_HelpNH<-do_SD_LG(GA$meanHelp, gen_without_help)
 SD_DispersalNH<-do_SD_LG(GA$meanDispersal, gen_without_help)
 SD_SurvivalNH<-do_SD_LG(GA$meanSurvival, gen_without_help)
+SD_SurvivalH_NH<-do_SD_LG(GA$meanSurvival_H, gen_without_help)
+SD_SurvivalB_NH<-do_SD_LG(GA$meanSurvival_B, gen_without_help)
+SD_SurvivalF_NH<-do_SD_LG(GA$meanSurvival_F, gen_without_help)
 SD_RelatednessNH<-do_SD_LG(GA$Relatedness, gen_without_help)
 SD_PropFloatBreederNH<-do_SD_LG(GA$propFloatBreeder, gen_without_help)
 
@@ -206,9 +258,15 @@ descriptivesR <- data.frame( ID=c(nameFile),
                              CumHelp=c(meanCumHelpR),
                              Dispersal=c(meanDispersalR),
                              Survival=c(meanSurvivalR),
+                             SurvivalH=c(meanSurvivalH_R),
+                             SurvivalB=c(meanSurvivalB_R),
+                             SurvivalF=c(meanSurvivalF_R),
                              Relatedness=c(meanRelatednessR),
                              Age=c(meanAgeR),
-                             Num_helpers=c(meanNumHelpersR),
+                             AgeH=c(meanAgeH_R),
+                             AgeB=c(meanAgeB_R),
+                             AgeF=c(meanAgeF_R),
+                             Group_size=c(meanGroupSizeR),
                              Help_Disp=c(meanCorr_Help_DispR),
                              propFloaterB=c(meanPropFloatBreederR))
 
@@ -222,39 +280,63 @@ descriptivesRNH <- data.frame( ID=c(nameFile),
                              CumHelp=c(meanCumHelpRNH),
                              Dispersal=c(meanDispersalRNH),
                              Survival=c(meanSurvivalRNH),
+                             SurvivalH=c(meanSurvivalH_RNH),
+                             SurvivalB=c(meanSurvivalB_RNH),
+                             SurvivalF=c(meanSurvivalF_RNH),
                              Relatedness=c(meanRelatednessRNH),
                              Age=c(meanAgeRNH),
-                             Num_helpers=c(meanNumHelpersRNH),
+                             AgeH=c(meanAgeH_RNH),
+                             AgeB=c(meanAgeB_RNH),
+                             AgeF=c(meanAgeF_RNH),
+                             Group_size=c(meanGroupSizeRNH),
                              Help_Disp=c(meanCorr_Help_DispRNH),
                              propFloaterB=c(meanPropFloatBreederRNH))
 
 
-descriptives <- data.frame(Variable=c("alpha", "alphaAge", "alphaAge2",
+descriptives <- data.frame(Variable=c("alpha", "alphaAge", #"alphaAge2",
                                       "beta", "betaAge",
-                                      "Help","CumHelp", "Dispersal", "Survival", "Relatedness",
-                                      "age","Num_helpers",
+                                      "Help","CumHelp", "Dispersal", 
+                                      "Survival", "SurvivalH","SurvivalB","SurvivalF",
+                                      "Relatedness",
+                                      "age","ageH","ageB","ageF",
+                                      "Group_size",
                                       "Help_Disp", "propFloaterB"),
-                           Mean=c(meanAlpha, meanAlphaAge, meanAlphaAge2,
+                           Mean=c(meanAlpha, meanAlphaAge, #meanAlphaAge2,
                                   meanBeta, meanBetaAge,
-                                  meanHelp,meanCumHelp, meanDispersal,meanSurvival,meanRelatedness,
-                                  meanAge,meanNumHelpers,
+                                  meanHelp,meanCumHelp, meanDispersal,
+                                  meanSurvival,meanSurvivalH, meanSurvivalB, meanSurvivalF,
+                                  meanRelatedness,
+                                  meanAge, meanAgeH, meanAgeB, meanAgeF,
+                                  meanGroupSize,
                                   meanCorr_Help_Disp, meanPropFloatBreeder),
-                           SD=c(SD_Alpha,SD_AlphaAge,SD_AlphaAge2,
+                           SD=c(SD_Alpha,SD_AlphaAge,#SD_AlphaAge2,
                                 SD_Beta,SD_BetaAge,
-                                SD_Help,SD_CumHelp, SD_Dispersal,SD_Survival,SD_Relatedness,
-                                SD_Age,SD_NumHelpers,
+                                SD_Help,SD_CumHelp, SD_Dispersal,
+                                SD_Survival, SD_SurvivalH, SD_SurvivalB, SD_SurvivalF,
+                                SD_Relatedness,
+                                SD_Age, SD_AgeH, SD_AgeB, SD_AgeF,
+                                SD_GroupSize,
                                 SDcorr_Help_Disp, SD_PropFloatBreeder))
 
 
 descriptivesNH <- data.frame(Variable=c("beta", "betaAge",
-                                      "Help","Dispersal", "Survival", "Relatedness",
-                                      "age", "Num_helpers","propFloaterB"),
+                                      "Help","Dispersal", 
+                                      "Survival", "SurvivalH","SurvivalB","SurvivalF",
+                                      "Relatedness",
+                                      "age","ageH","ageB","ageF",
+                                      "Group_size","propFloaterB"),
                            Mean=c(meanBetaNH, meanBetaAgeNH,
-                                  meanHelpNH,meanDispersalNH,meanSurvivalNH,meanRelatednessNH,
-                                  meanAgeNH,meanNumHelpersNH,meanPropFloatBreederNH),
+                                  meanHelpNH,meanDispersalNH,
+                                  meanSurvivalNH, meanSurvivalH_NH, meanSurvivalB_NH, meanSurvivalF_NH,
+                                  meanRelatednessNH,
+                                  meanAgeNH, meanAgeH_NH, meanAgeB_NH, meanAgeF_NH,
+                                  meanGroupSizeNH,meanPropFloatBreederNH),
                            SD=c(SD_BetaNH,SD_BetaAgeNH,
-                                SD_HelpNH,SD_DispersalNH,SD_SurvivalNH,SD_RelatednessNH,
-                                SD_AgeNH, SD_NumHelpersNH,SD_PropFloatBreederNH))
+                                SD_HelpNH,SD_DispersalNH,
+                                SD_SurvivalNH, SD_SurvivalH_NH, SD_SurvivalB_NH, SD_SurvivalF_NH,
+                                SD_RelatednessNH,
+                                SD_AgeNH, SD_AgeH_NH, SD_AgeB_NH, SD_AgeF_NH,
+                                SD_GroupSizeNH,SD_PropFloatBreederNH))
 
 
 write.xlsx(descriptivesR, paste(directory, "results_", nameFile, ".xlsx",sep=""), sheetName = "Result per replica", append = FALSE)
@@ -277,7 +359,7 @@ replace_with_zero_if_below_zero <- function(x) {
 ###Help
 
 help_Formula<-function(){
-  help <- GA2$alpha+GA2$alphaAge*GA2$age+GA2$alphaAge2*GA2$age*GA2$age
+  help <- GA2$alpha+GA2$alphaAge*GA2$age#+GA2$alphaAge2*GA2$age*GA2$age
   help <- sapply(help, replace_with_zero_if_below_zero)
   return(help)}
 
@@ -355,11 +437,11 @@ par(mfrow = c(1, 1))
 # 
 # 
 # ##Population stability?
-# pGroupSize<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Num_helpers)) +
-#   geom_ribbon(aes(ymin=GA_means$Num_helpers-GA_SD$Num_helpers, ymax=GA_means$Num_helpers+GA_SD$Num_helpers),
+# pGroupSize<-ggplot(GA_means, aes(x=GA_means$Generation, y=GA_means$Group_size)) +
+#   geom_ribbon(aes(ymin=GA_means$Group_size-GA_SD$Group_size, ymax=GA_means$Group_size+GA_SD$Group_size),
 #               alpha=0.3) +
 #   geom_line(color="purple", size=1)+
-#   xlab("Generation")+ ylab("Number of helpers")
+#   xlab("Generation")+ ylab("Group size")
 #   #coord_cartesian(ylim = c(0.049, 5))
 # 
 # 
@@ -417,10 +499,10 @@ pRelatedness<-ggplot(GA, aes(x=GA$Generation, y=GA$Relatedness, by=GA$Replica))+
 
 
 ##Population stability?
-pGroupSize<-ggplot(GA, aes(x=GA$Generation, y=GA$Num_helpers, by=GA$Replica))+
+pGroupSize<-ggplot(GA, aes(x=GA$Generation, y=GA$Group_size, by=GA$Replica))+
   geom_line(color="grey", size=0.5)+
   stat_summary(fun.y=mean, geom="line", colour="purple",lwd=1,aes(group=1))+
-  xlab("Generation")+ ylab("Number of helpers")
+  xlab("Generation")+ ylab("Group_size")
 
 
 ##Cummulative help in fecundity
@@ -454,30 +536,30 @@ if(Parameters[1,2]==1){
     return(x)
   }
 
-  help_Formula<-function(meanAlpha, meanAlphaAge, meanAlphaAge2){
-    help<-meanAlpha + meanAlphaAge*age + meanAlphaAge2*age*age
+  help_Formula<-function(meanAlpha, meanAlphaAge){ #meanAlphaAge2
+    help<-meanAlpha + meanAlphaAge*age# + meanAlphaAge2*age*age
     help<-ifelse(help<0,0,help)
     return(help)}
 
   meanAlpha<-do_mean_LG(GA$meanAlpha, 10000)
   meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 10000)
-  meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 10000)
-  helpP2<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 10000", ylim=range(min=0, max=1))
+  #meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 10000)
+  helpP2<-plot(age, help_Formula(meanAlpha, meanAlphaAge), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 10000", ylim=range(min=0, max=1))
 
   meanAlpha<-do_mean_LG(GA$meanAlpha, 25000)
   meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 25000)
-  meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 25000)
-  helpP3<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 25000", ylim=range(min=0, max=1))
+  #meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 25000)
+  helpP3<-plot(age, help_Formula(meanAlpha, meanAlphaAge), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 25000", ylim=range(min=0, max=1))
 
   meanAlpha<-do_mean_LG(GA$meanAlpha, 50000)
   meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 50000)
-  meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 50000)
-  helpP4<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 50000", ylim=range(min=0, max=1))
+  #meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 50000)
+  helpP4<-plot(age, help_Formula(meanAlpha, meanAlphaAge), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Generation 50000", ylim=range(min=0, max=1))
 
   meanAlpha<-do_mean_LG(GA$meanAlpha, 100000)
   meanAlphaAge<-do_mean_LG(GA$meanAlphaAge, 100000)
-  meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 100000)
-  helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge, meanAlphaAge2), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Last generation", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
+  #meanAlphaAge2<-do_mean_LG(GA$meanAlphaAge2, 100000)
+  helpP<-plot(age, help_Formula(meanAlpha, meanAlphaAge), type="l", col="red", lwd=4, xlab="Age", ylab="Help",main="Last generation", ylim=range(min=0, max=1))#, ylim=range(min=0, max=1.5)
 
 }
 
